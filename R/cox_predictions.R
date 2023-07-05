@@ -53,7 +53,6 @@ simplify_coxph=function(coxph.result)
     strt=rep(names(bl.cox$strata),bl.cox$strata)
     eq.pos=regexpr("=",strt,fixed=TRUE)
     strt.vname=substring(strt[1],1,eq.pos[1]-1)
-    #strt=substring(strt,eq.pos+1)
     bl.surv=cbind.data.frame(strata=strt,bl.surv)
     names(bl.surv)=c(strt.vname,"time","surv")
   }

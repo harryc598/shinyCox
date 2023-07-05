@@ -20,8 +20,6 @@
 #'
 #' @returns A shiny app written into specified directory.
 #'
-#' @examples
-#' leukemia
 #'
 #'
 #'
