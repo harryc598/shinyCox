@@ -32,9 +32,3 @@ which will have x = TRUE and model = TRUE as defaults, and also provide
 warnings if the model you are using is not suitable for this function.
 }
 
-\examples{
-leukemia
-
-
-
-}
