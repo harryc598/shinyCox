@@ -1,4 +1,4 @@
-Package: shinycox
+Package: rshinycox
 Title: Generates Shiny Application for Cox Proportional Hazards Model
 Version: 0.0.0.9000
 Authors@R: 
