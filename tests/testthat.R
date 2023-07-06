@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(shinycox)
+library(rshinycox)
 
-test_check("shinycox")
+test_check("rshinycox")

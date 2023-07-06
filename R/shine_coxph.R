@@ -13,14 +13,23 @@
 #' consider. For the function to run properly model = TRUE and x = TRUE are both
 #' required in the `coxph()` argument, which limits the ability to use `tt()`
 #' functions in the model. As well as that, strata by covariate interaction
-#' terms are not allowed. We have developed a wrapper function [make_coxph()],
+#' terms are not allowed. We have developed a wrapper function make_coxph,
 #' which will have x = TRUE and model = TRUE as defaults, and also provide
 #' warnings if the model you are using is not suitable for this function.
 #'
 #'
 #' @returns A shiny app written into specified directory.
+#' @examplesIf interactive()
 #'
-#'
+#' library(survival)
+#' temp_app_dir <- tempdir()
+#' names(leukemia)[names(leukemia) == "x"] <- "treatment"
+#' model1 <- coxph(Surv(time, status) ~ treatment, leukemia, x=TRUE, model=TRUE)
+#' shine_coxph("Model 1" = model1, app.dir = temp_app_dir)
+#' filedir <- list.files(temp_app_dir)
+#' shiny::runApp(paste0(temp_app_dir, "/", filedir))
+#' files <- list.files(temp_app_dir)
+#' file.remove(files)
 #'
 #'
 #' @export
@@ -91,8 +100,8 @@ shine_coxph=function(...)
   ########################
   # generate header code
   hdr.code=c("#rm(list=ls())",
-             "options(stringsAsFactors=F)",
-             paste0("load('",app.dir,"appData.Rdata')"))
+             "options(stringsAsFactors=FALSE)",
+             paste0("load('",gsub("\\\\", "/", app.dir),"appData.Rdata')"))
 
 
   ########################
@@ -148,12 +157,12 @@ shine_coxph=function(...)
 
   ##########################
   # app code
-  app.code=c("cox.app=shinyApp(ui,server)",
-             "runApp(cox.app)")
+  app.code=c("cox.app=shinyApp(ui,server)")
+             #"runApp(cox.app)")
 
   ###########################
   # write the app file
-  app.code.file=paste0(app.dir,"shinyCoxapp.R")
+  app.code.file=paste0(app.dir,"app.R")
   write(unlist(hdr.code),file=app.code.file,sep="\n")
   write(unlist(ui.code),file=app.code.file,sep="\n",append=TRUE)
   write(unlist(server.code),file=app.code.file,sep="\n",append=TRUE)

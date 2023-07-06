@@ -27,8 +27,23 @@ using the baseline survival from \code{survfit.coxph()}. Some extra things to
 consider. For the function to run properly model = TRUE and x = TRUE are both
 required in the \code{coxph()} argument, which limits the ability to use \code{tt()}
 functions in the model. As well as that, strata by covariate interaction
-terms are not allowed. We have developed a wrapper function \code{\link[=make_coxph]{make_coxph()}},
+terms are not allowed. We have developed a wrapper function make_coxph,
 which will have x = TRUE and model = TRUE as defaults, and also provide
 warnings if the model you are using is not suitable for this function.
 }
 
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+library(survival)
+temp_app_dir <- tempdir()
+names(leukemia)[names(leukemia) == "x"] <- "treatment"
+model1 <- coxph(Surv(time, status) ~ treatment, leukemia, x=TRUE, model=TRUE)
+shine_coxph("Model 1" = model1, app.dir = temp_app_dir)
+filedir <- list.files(temp_app_dir)
+shiny::runApp(paste0(temp_app_dir, "/", filedir))
+files <- list.files(temp_app_dir)
+file.remove(files)
+
+\dontshow{\}) # examplesIf}
+}

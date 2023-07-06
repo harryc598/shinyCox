@@ -81,9 +81,12 @@ simplify_coxph=function(coxph.result)
 
   # EXPERIMENTING
   ##############################################################
-  coefs <- coxph.result$coefficients
-  pattern <- "^[a-zA-Z0-9\\_\\.\\*\\:]+$"
-  badnames <- which(!grepl(pattern, names(coefs)))
+  coefs <- coef(coxph.result)
+  if(any(is.na(coefs))) {
+    stop("One or more of your coefficients is NA")
+  }
+  pattern <- "\\("
+  badnames <- which(grepl(pattern, names(coefs)))
   newcoefnames <- paste0("`", names(coefs)[badnames], "`")
   attr(coefs, "names")[badnames] = newcoefnames
   cox.coefs=coefs
@@ -184,24 +187,13 @@ compute_coxfit_xvector=function(coxfit,
   #EXPERIMENTING
   ####################################################################
   testform <- Reduce(paste, deparse(coxfit$form))
-  # ifelse(grepl("\\*", testform) | grepl("\\:", testform), {
-  #   tilde.pos=regexpr("~",testform,fixed=T)
-  #   form=substring(testform,tilde.pos)
-  #
-  #   # use model matrix to create x vector
-  #   formasform=as.formula(form)
-  #   mtx <- model.matrix(formasform, data=newdata, xlev = coxfit$xlevels)
-  # }, {
-  backtickedform <- gsub(" ","\`", testform)
-  backtickedform <- gsub("(\\`)(\\w)(\\:)(\\w)(\\`)", "\\2\\3\\4", backtickedform)
-  backtickedform <- gsub("(\\`)(\\w)(\\^)(\\w)(\\`)", "\\2\\3\\4", backtickedform)
-  splitform <- strsplit(backtickedform, "~")[[1]][2]
-  formfixedstrata <- gsub("\`strata", "strata", splitform)
-  readyform <- paste0("~", formfixedstrata)
-  formcall <- str2lang(readyform)
-  formasform <- as.formula(formcall, env = parent.frame())
+  splitform <- strsplit(testform, "~")[[1]][2]
+  fixed.functions <- gsub("([a-zA-Z0-9\\.]+\\(.*?\\))", "\\`\\1\\`", splitform)
+  fixedstrata <- gsub("\\`(strata\\(.*\\))\\`", "\\1", fixed.functions)
+  fixedstrata <- gsub("\\`(\\w+\\:strata\\(.*\\))\\`", "\\1", fixedstrata)
+  readyform <- paste0("~", fixedstrata)
+  formasform <- as.formula(readyform, env = parent.frame())
   mtx <- model.matrix(formasform, data=newdata, xlev = coxfit$xlevels)
-  #})
   ######################################################
 
   #mtx=model.matrix(form,data=newdata,xlev=coxfit$xlevels)
@@ -231,18 +223,39 @@ check_coxfit=function(cox.fit,coxph.result,tol=1e-7)
     # NEW TESTING
     ########################################################################
 
-    vars <- all.vars(coxph.result$call)
-    # origdataname <- vars[length(vars)]
-    # origdatavar <- str2lang(origdataname)
-    # origdata <- eval(origdatavar)
-
+    vars <- all.vars(coxph.result$formula)
+    if(!exists(coxph.result$call$data)) {
+      stop("Dataset(s) must be in environment while the function is running.
+           Afterwords the original data are no longer needed.")
+    }
     dataOrig <- eval(coxph.result$call$data)
+    dataOrig <- as.data.frame(dataOrig)
     notvars <- setdiff(names(dataOrig), vars)
     dataOrig <- dataOrig[,!names(dataOrig) %in% notvars]
     stringform <- Reduce(paste, deparse(coxph.result$formula))
-    output <- strsplit(stringform, " ~ ")[[1]][1]
-    dataOrig <- dataOrig[, !names(dataOrig) %in% output]
-    unused <- setdiff(names(dataOrig), names(new.data))
+    output <- strsplit(stringform, " ~ ")[[1]][1]        # remove response from formula
+    isSurv <- grepl("Surv\\(", output)                   # Checks form of response
+    if(isSurv) {
+      lhsadj1 <- strsplit(output, "Surv\\(")[[1]][2]       # strips Surv( from response
+      lhsadj2 <- strsplit(lhsadj1, "\\,")[[1]]             # Splits string by comma separation
+      lhsadj3 <- gsub("\\(", "", lhsadj2)                  # Removes parenthesis
+      lhsadj4 <- gsub("\\)", "", lhsadj3)                  # Removes paranthesis
+      lhsadj5 <- strsplit(lhsadj4, "\\$")                  # If data$variable, removes data$
+      lhsadj6 <- c()
+      for (i in 1:length(lhsadj5)) {                       # makes vector of names in response
+        if(is.na(lhsadj5[[i]][2])) {
+          lhsadj6 <- c(lhsadj6, lhsadj5[[i]][1])
+        } else {
+          lhsadj6 <- c(lhsadj6, lhsadj5[[i]][2])
+        }
+        if(grepl("\\s", lhsadj6[i])) {
+          lhsadj6[i] <- gsub("\\s+(\\w)?\\s+", "\\1", lhsadj6[i])
+        }
+      }
+      dataOrig <- dataOrig[, !names(dataOrig) %in% lhsadj6]          # removes response values if in original dataset
+    } else
+    {dataOrig <- dataOrig[, !names(dataOrig) %in% output]}
+    unused <- setdiff(names(dataOrig), names(new.data))            # Looks for any variables in original data not in newdata
     new.data <- cbind.data.frame(new.data, dataOrig[i, unused, drop = FALSE])
     ########################################################################
     cox.pred1=predict_one_coxfit(cox.fit,new.data)                 # prediction with new object
@@ -267,10 +280,7 @@ check_coxfit=function(cox.fit,coxph.result,tol=1e-7)
 one_survfit=function(coxph.result,newdata)
 
 {
-  # pattern <- "^[a-zA-Z0-9\\_\\.]+$"
-  # badnames <- which(!grepl(pattern, names(new.data)))
-  # newcoefnames <- paste0("`", names(new.data)[badnames], "`")
-  # attr(new.data, "names")[badnames] = newcoefnames
+
   sf.res=survfit(coxph.result,newdata=newdata)
   res=cbind.data.frame(time=sf.res$time,
                        surv=sf.res$surv)
