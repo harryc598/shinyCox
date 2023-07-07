@@ -4,7 +4,7 @@
 \alias{shine_coxph}
 \title{Build a shiny app for coxph models}
 \usage{
-shine_coxph(...)
+shine_coxph(..., app.dir = NULL)
 }
 \arguments{
 \item{...}{Any number of coxph models}
@@ -40,7 +40,7 @@ temp_app_dir <- tempdir()
 names(leukemia)[names(leukemia) == "x"] <- "treatment"
 model1 <- coxph(Surv(time, status) ~ treatment, leukemia, x=TRUE, model=TRUE)
 shine_coxph("Model 1" = model1, app.dir = temp_app_dir)
-filedir <- list.files(temp_app_dir)
+filedir <- list.files(temp_app_dir)[1]
 shiny::runApp(paste0(temp_app_dir, "/", filedir))
 files <- list.files(temp_app_dir)
 file.remove(files)
