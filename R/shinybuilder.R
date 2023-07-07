@@ -282,8 +282,9 @@ get_levels_cox_fits=function(cox.fit.list,vnames)
     cat.lvls[[j]]=unique(cat.lvls[[j]])
   }
 
-  cat.names=gsub("strata(","",cat.names,fixed=TRUE)
-  cat.names=gsub(")","",cat.names,fixed=TRUE)
+  # cat.names=gsub("strata(","",cat.names,fixed=TRUE)
+  # cat.names=gsub(")","",cat.names,fixed=TRUE)
+  cat.names <- gsub("strata\\((\\w*)\\)", "\\1", cat.names)
   names(cat.lvls)=cat.names
 
   return(cat.lvls)
