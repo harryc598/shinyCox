@@ -26,7 +26,7 @@
 #' names(leukemia)[names(leukemia) == "x"] <- "treatment"
 #' model1 <- coxph(Surv(time, status) ~ treatment, leukemia, x=TRUE, model=TRUE)
 #' shine_coxph("Model 1" = model1, app.dir = temp_app_dir)
-#' filedir <- list.files(temp_app_dir)
+#' filedir <- list.files(temp_app_dir)[1]
 #' shiny::runApp(paste0(temp_app_dir, "/", filedir))
 #' files <- list.files(temp_app_dir)
 #' file.remove(files)
@@ -35,7 +35,7 @@
 #' @export
 #' @importFrom grDevices hcl.colors
 #' @importFrom shiny showTab
-shine_coxph=function(...)
+shine_coxph=function(..., app.dir = NULL)
 
 {
   ########################
@@ -67,7 +67,7 @@ shine_coxph=function(...)
 
   ##########################
   # get app directory
-  app.dir=input.list$app.dir
+  #app.dir=input.list$app.dir
   if (is.null(app.dir)) {
     app.dir=getwd()
   }
