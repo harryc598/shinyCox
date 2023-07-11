@@ -52,8 +52,8 @@ simplify_coxph=function(coxph.result)
   {
     strt=rep(names(bl.cox$strata),bl.cox$strata)
     if(any(grepl("=", strt, fixed = TRUE))) {
-    eq.pos=regexpr("=",strt,fixed=TRUE)
-    strt.vname=substring(strt[1],1,eq.pos[1]-1)
+      eq.pos=regexpr("=",strt,fixed=TRUE)
+      strt.vname=substring(strt[1],1,eq.pos[1]-1)
     } else {
       where.strata <- which(grepl("strata(", names(coxph.result$model), fixed = TRUE))
       strt.vname <- names(coxph.result$model)[where.strata]
@@ -69,10 +69,10 @@ simplify_coxph=function(coxph.result)
   cox.smry=coef(summary(coxph.result))
   cox.CIs=confint(coxph.result)
   cox.pha=cox.zph(coxph.result)
-  HR.tbl=cbind(Hazard.Ratio=cox.smry[,"exp(coef)"],
-               Lower.Bound=exp(cox.CIs[,1]),
-               Upper.Bound=exp(cox.CIs[,2]),
-               p.value=cox.smry[,"Pr(>|z|)"])
+  HR.tbl=cbind.data.frame("Hazard Ratio"=cox.smry[,"exp(coef)"],
+               "Lower Bound"=exp(cox.CIs[,1]),
+               "Upper Bound"=exp(cox.CIs[,2]),
+               "p value"=cox.smry[,"Pr(>|z|)"])
   pha.tbl=cox.pha
   nevents=coxph.result$nevent
   nsample=coxph.result$n
@@ -151,7 +151,7 @@ predict_one_coxfit=function(coxfit,          # result of prep.coxfit
   x=compute_coxfit_xvector(coxfit,newdata)              # convert the input data into an x vector
   coef.names=names(coxfit$coefs)                        # extract the names of the coeffients
   if(length(coef.names) == 1){
-    x.beta=sum(coxfit$coef2s*(x-coxfit$means))
+    x.beta=sum(coxfit$coefs*(x-coxfit$means))
   } else
     x.beta=sum(coxfit$coefs*(x[coef.names]-coxfit$means)) # see help(predict.coxph) for notes on centering
   res=coxfit$bl.surv                                    # initialize result as baseline survival function
@@ -161,12 +161,15 @@ predict_one_coxfit=function(coxfit,          # result of prep.coxfit
   # if stratified model, then limit to the stratum of newdata
   if (!is.null(coxfit$strata))
   {
-    strt.var=coxfit$strata[1]
+    #strt.var=coxfit$strata[1]
+    strt.col.name <- names(coxfit$bl.surv[,!names(coxfit$bl.surv) %in% c("time", "surv"), drop = FALSE])
+    strt.var <- newdata[, strt.col.name]
     if(grepl("=", strt.var, fixed = TRUE)) {
     eq.pos=regexpr("=",strt.var,fixed=TRUE)
     strt.var=substring(strt.var,1,eq.pos-1)
     }
-    strt.mtch=(newdata[,strt.var]==res[,1])
+    strt.column <- which(grepl(strt.var, newdata, fixed = TRUE))
+    strt.mtch=(newdata[,strt.column]==res[,1])
     if (!any(strt.mtch)) {
       stop(paste0("Unable to match strata variable ",
                   strt.var," in newdata."))
@@ -204,7 +207,7 @@ compute_coxfit_xvector=function(coxfit,
   testform <- Reduce(paste, deparse(coxfit$form))
   splitform <- strsplit(testform, "~")[[1]][2]
   fixed.functions <- gsub("([a-zA-Z0-9\\.]+\\(.*?\\))", "\\`\\1\\`", splitform)
-  fixedstrata <- gsub("\\`(strata\\(.*\\))\\`", "\\1", fixed.functions)
+  fixedstrata <- gsub("\\`(strata\\(\\w*\\))\\`", "\\1", fixed.functions)
   fixedstrata <- gsub("\\`(\\w+\\:strata\\(.*\\))\\`", "\\1", fixedstrata)
   readyform <- paste0("~", fixedstrata)
   formasform <- as.formula(readyform, env = parent.frame())
@@ -231,7 +234,7 @@ check_coxfit=function(cox.fit,coxph.result,tol=1e-7)
   n=nrow(cox.input)
   for (i in 1:n)
   {
-    if(length(cox.input[i, ]) == 1) {
+    if(length(cox.input[i, -1]) == 1) {
       new.data=as.data.frame(cox.input[i,-1, drop = FALSE])          # get data for subject i
     } else
       new.data=as.data.frame(cox.input[i,-1])
@@ -249,29 +252,29 @@ check_coxfit=function(cox.fit,coxph.result,tol=1e-7)
     original.data <- as.data.frame(original.data)
     notvars <- setdiff(names(original.data), vars)
     original.data <- original.data[,!names(original.data) %in% notvars]
-    # stringform <- Reduce(paste, deparse(coxph.result$formula))
-    # output <- strsplit(stringform, " ~ ")[[1]][1]        # remove response from formula
-    # isSurv <- grepl("Surv\\(", output)                   # Checks form of response
-    # if(isSurv) {
-    #   lhsadj1 <- strsplit(output, "Surv\\(")[[1]][2]       # strips Surv( from response
-    #   lhsadj2 <- strsplit(lhsadj1, "\\,")[[1]]             # Splits string by comma separation
-    #   lhsadj3 <- gsub("\\(", "", lhsadj2)                  # Removes parenthesis
-    #   lhsadj4 <- gsub("\\)", "", lhsadj3)                  # Removes paranthesis
-    #   lhsadj5 <- strsplit(lhsadj4, "\\$")                  # If data$variable, removes data$
-    #   lhsadj6 <- c()
-    #   for (i in 1:length(lhsadj5)) {                       # makes vector of names in response
-    #     if(is.na(lhsadj5[[i]][2])) {
-    #       lhsadj6 <- c(lhsadj6, lhsadj5[[i]][1])
-    #     } else {
-    #       lhsadj6 <- c(lhsadj6, lhsadj5[[i]][2])
-    #     }
-    #     if(grepl("\\s", lhsadj6[i])) {
-    #       lhsadj6[i] <- gsub("\\s*(\\w)?\\s*", "\\1", lhsadj6[i])
-    #     }
-    #   }
-    #   original.data <- original.data[, !names(original.data) %in% lhsadj6]          # removes response values if in original dataset
-    # } else
-    # {original.data <- original.data[, !names(original.data) %in% output]}
+    stringform <- Reduce(paste, deparse(coxph.result$formula))
+    output <- strsplit(stringform, " ~ ")[[1]][1]        # remove response from formula
+    isSurv <- grepl("Surv\\(", output)                   # Checks form of response
+    if(isSurv) {
+      lhsadj1 <- strsplit(output, "Surv\\(")[[1]][2]       # strips Surv( from response
+      lhsadj2 <- strsplit(lhsadj1, "\\,")[[1]]             # Splits string by comma separation
+      lhsadj3 <- gsub("\\(", "", lhsadj2)                  # Removes parenthesis
+      lhsadj4 <- gsub("\\)", "", lhsadj3)                  # Removes paranthesis
+      lhsadj5 <- strsplit(lhsadj4, "\\$")                  # If data$variable, removes data$
+      lhsadj6 <- c()
+      for (j in 1:length(lhsadj5)) {                       # makes vector of names in response
+        if(is.na(lhsadj5[[j]][2])) {
+          lhsadj6 <- c(lhsadj6, lhsadj5[[j]][1])
+        } else {
+          lhsadj6 <- c(lhsadj6, lhsadj5[[j]][2])
+        }
+        if(grepl("\\s", lhsadj6[j])) {
+          lhsadj6[j] <- gsub("\\s*(\\w)?\\s*", "\\1", lhsadj6[j])
+        }
+      }
+      original.data <- original.data[, !names(original.data) %in% lhsadj6, drop = FALSE]          # removes response values if in original dataset
+    } else
+    {original.data <- original.data[, !names(original.data) %in% output, drop = FALSE]}
     unused <- setdiff(names(original.data), names(new.data))            # Looks for any variables in original data not in newdata
     new.data <- cbind.data.frame(new.data, original.data[i, unused, drop = FALSE])
     ########################################################################
