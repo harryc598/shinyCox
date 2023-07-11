@@ -81,7 +81,7 @@ cox_KM_plots=function(KM.hat,clrs=NULL)
        ylab="Prob",type="n")
 
   for (i in 1:n.models) {
-    lines(KM.hat[[i]],col=clrs[i])
+    lines(KM.hat[[i]],col=clrs[i], lwd = 2)
   }
 
   legend(1.05*max.time,1,
