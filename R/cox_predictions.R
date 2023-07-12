@@ -164,12 +164,17 @@ predict_one_coxfit=function(coxfit,          # result of prep.coxfit
     #strt.var=coxfit$strata[1]
     strt.col.name <- names(coxfit$bl.surv[,!names(coxfit$bl.surv) %in% c("time", "surv"), drop = FALSE])
     strt.var <- newdata[, strt.col.name]
+    # Add note
     if(grepl("=", strt.var, fixed = TRUE)) {
     eq.pos=regexpr("=",strt.var,fixed=TRUE)
     strt.var=substring(strt.var,1,eq.pos-1)
-    }
+    strt.mtch <- (newdata[, strt.var] == res[, strt.var])
+    } else if(is.character(strt.var)) {
     strt.column <- which(grepl(strt.var, newdata, fixed = TRUE))
     strt.mtch=(newdata[,strt.column]==res[,1])
+    } else {
+      strt.mtch <- (newdata[, strt.col.name] == res[, 1])
+    }
     if (!any(strt.mtch)) {
       stop(paste0("Unable to match strata variable ",
                   strt.var," in newdata."))
