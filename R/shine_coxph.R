@@ -1,35 +1,42 @@
 #' Build a shiny app for coxph models
 #'
-#' Generates a shiny app to visualize Cox proportional hazard models
-#' created by `coxph()`
+#' Generates a shiny app to visualize Cox proportional hazard models created by
+#' `coxph()`
 #'
 #' @param ... Any number of coxph models
 #' @param app.dir directory where shiny app will be written
 #' @section Details:
 #'
-#' One of the important features of this function is that the shiny app, once
-#' created, will not contain any of the original data, with predictions made
-#' using the baseline survival from `survfit.coxph()`. Some extra things to
-#' consider. For the function to run properly model = TRUE and x = TRUE are both
-#' required in the `coxph()` argument, which limits the ability to use `tt()`
-#' functions in the model. As well as that, strata by covariate interaction
-#' terms are not allowed. We have developed a wrapper function make_coxph,
-#' which will have x = TRUE and model = TRUE as defaults, and also provide
-#' warnings if the model you are using is not suitable for this function.
+#'   One of the important features of this function is that the shiny app, once
+#'   created, will not contain any identifiable data, containing only
+#'   information necessary for predictions. There are some requirements in order
+#'   for this function to run without error: in your original `coxph()` function
+#'   or functions, model = TRUE and x = TRUE are required arguments. Because of
+#'   this requirement the use of `tt()` is not allowed in our function. As well
+#'   as that, strata by covariate interaction terms are not allowed. Please do
+#'   not use "." in the formula at this time either. There is a function
+#'   included in the package that will handle these requirements and provide
+#'   warnings if your model as constructed is unlikely to work with this
+#'   function.
 #'
 #'
 #' @returns A shiny app written into specified directory.
 #' @examplesIf interactive()
 #'
-#' library(survival)
-#' temp_app_dir <- tempdir()
-#' names(leukemia)[names(leukemia) == "x"] <- "treatment"
-#' model1 <- coxph(Surv(time, status) ~ treatment, leukemia, x=TRUE, model=TRUE)
-#' shine_coxph("Model 1" = model1, app.dir = temp_app_dir)
-#' filedir <- list.files(temp_app_dir)[1]
-#' shiny::runApp(paste0(temp_app_dir, "/", filedir))
-#' files <- list.files(temp_app_dir)
-#' file.remove(files)
+#'   library(survival)
+#'   temp_app_dir <- tempdir()
+#'   names(leukemia)[names(leukemia) == "x"] <- "treatment"
+#'   model1 <- coxph(Surv(time, status) ~ treatment,
+#'   leukemia, x=TRUE, model=TRUE)
+#'
+#'   shine_coxph("Model 1" = model1, app.dir =
+#'   temp_app_dir)
+#'
+#'   filedir <- list.files(temp_app_dir)[1]
+#'
+#'   shiny::runApp(paste0(temp_app_dir, "/", filedir))
+#'   files <- list.files(temp_app_dir)
+#'   file.remove(files)
 #'
 #'
 #' @export
