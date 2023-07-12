@@ -317,8 +317,8 @@ get_xrng_cox_fits=function(cox.fit.list,vnames)
     for (j in 1:ncol(rng.mtx))
     {
       x.name=colnames(rng.mtx)[j]
-      rng.mtx[1,x.name]=min(x.rng[1,x.name],rng.mtx[1,x.name],na.rm=T)
-      rng.mtx[2,x.name]=max(x.rng[2,x.name],rng.mtx[2,x.name],na.rm=T) #changed from min()
+      rng.mtx[1,x.name] <- min(x.rng[1,x.name],rng.mtx[1,x.name],na.rm = TRUE)
+      rng.mtx[2,x.name] <- max(x.rng[2,x.name],rng.mtx[2,x.name],na.rm = TRUE) #changed from min()
     }
   }
   return(rng.mtx)
