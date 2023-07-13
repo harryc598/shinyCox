@@ -281,6 +281,9 @@ check_coxfit=function(cox.fit,coxph.result,tol=1e-7)
     } else
     {original.data <- original.data[, !names(original.data) %in% output, drop = FALSE]}
     unused <- setdiff(names(original.data), names(new.data))            # Looks for any variables in original data not in newdata
+    if(class(coxph.result$na.action) == "omit") {
+    original.data <- as.data.frame(na.omit(original.data))
+    }
     new.data <- cbind.data.frame(new.data, original.data[i, unused, drop = FALSE])
     ########################################################################
     cox.pred1=predict_one_coxfit(cox.fit,new.data)                 # prediction with new object
