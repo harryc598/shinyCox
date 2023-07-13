@@ -4,12 +4,17 @@
 \alias{shine_coxph}
 \title{Build a shiny app for coxph models}
 \usage{
-shine_coxph(..., app.dir = NULL)
+shine_coxph(..., app.dir = NULL, theme = c("default", "dashboard"))
 }
 \arguments{
 \item{...}{Any number of coxph models}
 
 \item{app.dir}{directory where shiny app will be written}
+
+\item{theme}{theme of shiny app. This changes the overall appearance of the
+app. The first is the default theme, requiring only shiny to use. The
+"dashboard" theme requires the shinydashboard and DT packages to run
+properly.}
 }
 \value{
 A shiny app written into specified directory.
@@ -32,6 +37,11 @@ not use "." in the formula at this time either. There is a function
 included in the package that will handle these requirements and provide
 warnings if your model as constructed is unlikely to work with this
 function.
+
+There are some more guidelines for formula notation. There is some leniency
+in that you can use functions inside the formula, but using nested
+functions will fail. Considering the input names used in shiny are taken
+directly from the formula, it is best not to add too many convolutions.
 }
 
 \examples{
