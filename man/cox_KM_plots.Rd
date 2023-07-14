@@ -7,7 +7,7 @@
 cox_KM_plots(KM.hat, clrs = NULL)
 }
 \arguments{
-\item{KM.hat}{Kaplan-Meier estimate}
+\item{KM.hat}{Kaplan-Meier estimate, created by \code{\link[=predict_one_coxfit]{predict_one_coxfit()}}}
 
 \item{clrs}{color of lines, consider for removal}
 }
@@ -16,4 +16,55 @@ Plot of predicted survival curves
 }
 \description{
 Generate Cox predicted KM plots
+}
+\details{
+The main purpose of this function is to be used to create plots within the
+shiny app created by \code{\link[=shine_coxph]{shine_coxph()}}. For this reason the argument it takes,
+\code{KM.hat}, is created through a process delineated in the example. This
+can make the function more complicated if you want to use it outside of
+the shiny app, although it is fully possible to do so.
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(survival)
+# First colon is split into three treatment arms
+split_colon <- split(colon, colon$rx)
+
+colon_arm1 <- split_colon$Obs
+colon_arm2 <- split_colon$Lev
+colon_arm3 <- split_colon$`Lev+5FU`
+
+# Three coxph models are fit for each treatment
+
+colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes, colon_arm1,
+                 x = TRUE, model = TRUE)
+colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm2,
+                 x = TRUE, model = TRUE)
+colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm3,
+                 x = TRUE, model = TRUE)
+# Creating list of models
+cox.fit.list <- vector("list", 3)
+cox.fit.list[[1]] <- prep_coxfit(colon1ph)
+cox.fit.list[[2]] <- prep_coxfit(colon2ph)
+cox.fit.list[[3]] <- prep_coxfit(colon3ph)
+
+# Creating new data row for predictions
+new.data <- colon[1, ]
+# Creating KM.hat object
+n.models=length(cox.fit.list)
+KM.hat=vector('list',n.models)
+lp=rep(NA,n.models)
+names(KM.hat)=names(cox.fit.list)
+for (i in 1:n.models)
+{
+ km.hat=predict_one_coxfit(cox.fit.list[[i]],new.data)
+ lp[i]=attr(km.hat,'lp')
+ sfit=list(time=km.hat$time,surv=km.hat$surv)
+ class(sfit)='survfit'
+ KM.hat[[i]]=sfit
+}
+# Plotting
+cox_KM_plots(KM.hat)
+
+\dontshow{\}) # examplesIf}
 }
