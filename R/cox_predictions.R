@@ -139,7 +139,7 @@ simplify_coxph=function(coxph.result)
 #'
 #' Computes predicted survival outcome for one patient based
 #' on a Cox model fit.
-#' @param coxfit coxfit object result of prep.coxfit
+#' @param coxfit This is an object returned by [prep_coxfit()]
 #' @param newdata vector of new data
 #' @returns data.frame of predicted survival outcomes
 #' @export
