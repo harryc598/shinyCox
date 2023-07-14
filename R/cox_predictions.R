@@ -37,12 +37,12 @@ simplify_coxph=function(coxph.result)
   ########
   # extract survival and linear predictor data from coxph.result
   sdat=coxph.result$y
-  lp=predict(coxph.result,type="lp")
+  lp=stats::predict(coxph.result,type="lp")
   lp.surv=cbind.data.frame(sdat=sdat,lp=lp)
 
   ########
   # compute the baseline Cox survival function in a data.frame format
-  bl.cox=survfit(coxph.result)
+  bl.cox=survival::survfit(coxph.result)
   bl.surv=cbind.data.frame(time=bl.cox$time,  # baseline survival function corresponding to baseline hazard function
                            surv=bl.cox$surv)
 
@@ -66,9 +66,9 @@ simplify_coxph=function(coxph.result)
 
   ########
   # extract tables of estimates and evaluation of proportional hazards assumption
-  cox.smry=coef(summary(coxph.result))
-  cox.CIs=confint(coxph.result)
-  cox.pha=cox.zph(coxph.result)
+  cox.smry=stats::coef(summary(coxph.result))
+  cox.CIs=stats::confint(coxph.result)
+  cox.pha=survival::cox.zph(coxph.result)
   HR.tbl=cbind.data.frame("Hazard Ratio"=cox.smry[,"exp(coef)"],
                "Lower Bound"=exp(cox.CIs[,1]),
                "Upper Bound"=exp(cox.CIs[,2]),
@@ -88,7 +88,7 @@ simplify_coxph=function(coxph.result)
 
   # EXPERIMENTING
   ##############################################################
-  coefs <- coef(coxph.result)
+  coefs <- stats::coef(coxph.result)
   if(any(is.na(coefs))) {
     stop("One or more of your coefficients is NA")
   }
@@ -215,8 +215,8 @@ compute_coxfit_xvector=function(coxfit,
   fixedstrata <- gsub("\\`(strata\\(\\w*\\))\\`", "\\1", fixed.functions)
   fixedstrata <- gsub("\\`(\\w+\\:strata\\(.*\\))\\`", "\\1", fixedstrata)
   readyform <- paste0("~", fixedstrata)
-  formasform <- as.formula(readyform, env = parent.frame())
-  mtx <- model.matrix(formasform, data=newdata, xlev = coxfit$xlevels)
+  formasform <- stats::as.formula(readyform, env = parent.frame())
+  mtx <- stats::model.matrix(formasform, data=newdata, xlev = coxfit$xlevels)
   ######################################################
 
   #mtx=model.matrix(form,data=newdata,xlev=coxfit$xlevels)
@@ -281,7 +281,7 @@ check_coxfit=function(cox.fit,coxph.result,tol=1e-7)
     } else
     {original.data <- original.data[, !names(original.data) %in% output, drop = FALSE]}
     unused <- setdiff(names(original.data), names(new.data))            # Looks for any variables in original data not in newdata
-    if(class(coxph.result$na.action) == "omit") {
+    if (inherits(coxph.result$na.action, "omit")) {
     original.data <- as.data.frame(na.omit(original.data))
     }
     new.data <- cbind.data.frame(new.data, original.data[i, unused, drop = FALSE])
@@ -305,7 +305,7 @@ one_survfit=function(coxph.result,newdata)
 
 {
 
-  sf.res=survfit(coxph.result,newdata=newdata)
+  sf.res=survival::survfit(coxph.result,newdata=newdata)
   res=cbind.data.frame(time=sf.res$time,
                        surv=sf.res$surv)
   # NOT NEEDED AFTER SURVIVAL 3.3
