@@ -10,7 +10,7 @@
 #' @param label visual label of select
 #' @param choices vector of choices to be made available
 #' @returns Vector containing ui and server code
-#' @export
+#' @noRd
 ez_pickone=function(vname,    # Variable name
                     label,    # Variable label in the GUI
                     choices)  # possible values of the variable
@@ -46,7 +46,7 @@ ez_pickone=function(vname,    # Variable name
 #' @param max maximum value of slider
 #' @param value default slider value
 #' @returns Vector containing shiny ui and server code for `sliderInput()`
-#' @export
+#' @noRd
 ez_slider=function(vname,  # variable name
                    label,  # variable label in the GUI
                    min,    # minimum possible value of the variable
@@ -130,7 +130,7 @@ ez_sidebarLayout=function(ui.sidebar,  # ui code for the sidebar
 #' @param label visual label of select
 #' @param choices vector of choices, must be TRUE and FALSE
 #' @returns vector containing ui and server code for `selectInput()`
-#' @export
+#' @noRd
 ez_pickone_logic=function(vname,    # Variable name
                           label,    # Variable label in the GUI
                           choices)  # possible values of the variable
