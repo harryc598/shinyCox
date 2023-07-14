@@ -2,9 +2,6 @@
 
 export(cox_KM_plots)
 export(cox_times_table)
-export(ez_pickone)
-export(ez_pickone_logic)
-export(ez_slider)
 export(predict_one_coxfit)
 export(prep_coxfit)
 export(shine_coxph)
