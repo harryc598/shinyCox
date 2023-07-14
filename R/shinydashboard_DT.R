@@ -12,7 +12,7 @@ make_DT_table <- function(cox.fit.list) {
   for(i in 1:length(cox.fit.list)) {
   if(i < length(cox.fit.list)) {
     uicodetop <- c(uicodetop,
-                   paste0("menuSubItem('", names(cox.fit.list)[i], "', tabName = table", i, "),")
+                   paste0("menuSubItem('", names(cox.fit.list)[i], "', tabName = 'table", i, "'),")
     )
     uicodebottom <- c(uicodebottom,
                       paste0("tabItem('table", i, "',"),
@@ -50,7 +50,7 @@ make_DT_table <- function(cox.fit.list) {
                            "                                 fontweight = DT::styleInterval(0.05, c('bold', 'normal'))))",
                     paste0("output$PHA", i, "=DT::renderDataTable(DT::datatable(cox.fit.list[[", i, "]]$PHA.table$table,"),
                            "                                      options = list(",
-                           "                                      dom = 't'))",
+                           "                                      dom = 't')))",
                            paste0("output$title", i, "=renderText(paste(cox.fit.list[[",i,"]]$nsample, 'subjects,', cox.fit.list[[",i, "]]$nevents, 'events'))")
                     )
 
