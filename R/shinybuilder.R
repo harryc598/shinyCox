@@ -51,7 +51,7 @@ write_KM_plot_code=function(cox.fit.list,clrs)
 #############################
 #' Generate Cox predicted KM plots
 #'
-#' @param KM.hat Kaplan-Meier estimate, created by [predict_one_coxfit()]
+#' @param KM.hat Time and survival probability created by [predict_one_coxfit()]
 #' @param clrs color of lines, consider for removal
 #' @returns Plot of predicted survival curves
 #'

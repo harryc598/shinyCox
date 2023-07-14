@@ -7,7 +7,7 @@
 cox_KM_plots(KM.hat, clrs = NULL)
 }
 \arguments{
-\item{KM.hat}{Kaplan-Meier estimate, created by \code{\link[=predict_one_coxfit]{predict_one_coxfit()}}}
+\item{KM.hat}{Time and survival probability created by \code{\link[=predict_one_coxfit]{predict_one_coxfit()}}}
 
 \item{clrs}{color of lines, consider for removal}
 }

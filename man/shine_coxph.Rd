@@ -2,19 +2,19 @@
 % Please edit documentation in R/shine_coxph.R
 \name{shine_coxph}
 \alias{shine_coxph}
-\title{Build a shiny app for coxph models}
+\title{Build a shiny app for Cox proportional hazard models}
 \usage{
 shine_coxph(..., app.dir = NULL, theme = c("default", "dashboard"))
 }
 \arguments{
-\item{...}{Any number of coxph models}
+\item{...}{Objects created by \code{coxph()}}
 
-\item{app.dir}{directory where shiny app will be written}
+\item{app.dir}{Directory where shiny app will be written}
 
-\item{theme}{theme of shiny app. This changes the overall appearance of the
+\item{theme}{Theme of shiny app. This changes the overall appearance of the
 app. The first is the default theme, requiring only shiny to use. The
-"dashboard" theme requires the shinydashboard and DT packages to run
-properly.}
+"dashboard" theme requires the \code{shinydashboard} and \code{DT} packages
+to run properly.}
 }
 \value{
 A shiny app written into specified directory.

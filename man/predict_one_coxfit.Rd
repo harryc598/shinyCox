@@ -7,7 +7,7 @@
 predict_one_coxfit(coxfit, newdata)
 }
 \arguments{
-\item{coxfit}{coxfit object result of prep.coxfit}
+\item{coxfit}{This is an object returned by \code{\link[=prep_coxfit]{prep_coxfit()}}}
 
 \item{newdata}{vector of new data}
 }
