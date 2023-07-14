@@ -1,19 +1,24 @@
 Package: rshinycox
 Title: Generates Shiny Application for Cox Proportional Hazards Model
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+Authors@R: c(
+    person("Harrison", "Clement", , "harrisonclement16@gmail.com", role = c("aut", "cre")),
+    person("Subodh", "Selukar", , "subodh.selukar@stjude.org", role = "aut"),
+    person("Stanley", "Pounds", , "stanley.pounds@stjude.org", role = "aut"),
+    person("St Jude Children's Research Hospital", role = "fnd")
+  )
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
+URL: https://github.com/harryc598/rshinycox
+BugReports: https://github.com/harryc598/rshinycox/issues
+Imports: 
+    shiny,
+    survival (>= 3.3)
+Suggests: 
+    DT,
+    shinydashboard,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Imports: 
-    shiny,
-    survival
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
-URL: https://github.com/harryc598/rshinycox
-BugReports: https://github.com/harryc598/rshinycox/issues
