@@ -47,7 +47,11 @@ make_DT_table <- function(cox.fit.list) {
                            "                 DT::formatRound(columns = c('Hazard Ratio', 'Lower Bound', 'Upper Bound', 'p value'), digits = 4) |>",
                            "                 DT::formatStyle('p value',",
                            "                                 target = 'cell',",
-                           "                                 fontweight = styleInterval(0.05, c('bold', 'normal'))))"
+                           "                                 fontweight = DT::styleInterval(0.05, c('bold', 'normal'))))",
+                    paste0("output$PHA", i, "=DT::renderDataTable(DT::datatable(cox.fit.list[[", i, "]]$PHA.table$table,"),
+                           "                                      options = list(",
+                           "                                      dom = 't'))",
+                           paste0("output$title", i, "=renderText(paste(cox.fit.list[[",i,"]]$nsample, 'subjects,', cox.fit.list[[",i, "]]$nevents, 'events'))")
                     )
 
   }
