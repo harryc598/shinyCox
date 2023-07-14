@@ -1,14 +1,14 @@
-#' Build a shiny app for coxph models
+#' Build a shiny app for Cox proportional hazard models
 #'
 #' Generates a shiny app to visualize Cox proportional hazard models created by
 #' `coxph()`
 #'
-#' @param ... Any number of coxph models
-#' @param app.dir directory where shiny app will be written
-#' @param theme theme of shiny app. This changes the overall appearance of the
+#' @param ... Objects created by \code{coxph()}
+#' @param app.dir Directory where shiny app will be written
+#' @param theme Theme of shiny app. This changes the overall appearance of the
 #'   app. The first is the default theme, requiring only shiny to use. The
-#'   "dashboard" theme requires the shinydashboard and DT packages to run
-#'   properly.
+#'   "dashboard" theme requires the \code{shinydashboard} and \code{DT} packages
+#'   to run properly.
 #' @section Details:
 #'
 #'   One of the important features of this function is that the shiny app, once
