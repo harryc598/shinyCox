@@ -2,9 +2,9 @@ Package: rshinycox
 Title: Generates Shiny Application for Cox Proportional Hazards Model
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Harrison", "Clement", , "harrisonclement16@gmail.com", role = c("aut", "cre")),
+    person("Stanley", "Pounds", , "stanley.pounds@stjude.org", role = c("aut", "cph")),
     person("Subodh", "Selukar", , "subodh.selukar@stjude.org", role = "aut"),
-    person("Stanley", "Pounds", , "stanley.pounds@stjude.org", role = "aut"),
+    person("Harrison", "Clement", , "harrisonclement16@gmail.com", role = c("aut", "cre")),
     person("St Jude Children's Research Hospital", role = "fnd")
   )
 Description: What the package does (one paragraph).
