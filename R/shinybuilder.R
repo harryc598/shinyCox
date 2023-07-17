@@ -1,6 +1,11 @@
 ################################
 # write the shiny code to generate plots
-
+#' Write shiny code to create plots
+#'
+#' @param cox.fit.list List object created by [prep_coxfit()]
+#' @param clrs vector of colors for lines (deprecated)
+#' @returns Vector of code used in shiny app to generate plots
+#' @noRd
 write_KM_plot_code=function(cox.fit.list,clrs)
 {
   n.models=length(cox.fit.list)
@@ -100,7 +105,7 @@ write_KM_plot_code=function(cox.fit.list,clrs)
 #'  class(sfit)='survfit'
 #'  KM.hat[[i]]=sfit
 #' }
-#' # Plotting
+#' # Plot
 #' cox_KM_plots(KM.hat)
 #'
 #'
@@ -142,16 +147,73 @@ cox_KM_plots=function(KM.hat,clrs=NULL)
 
 #############################
 # Generate Cox predicted times table: SUBODH NEW ADDITION
-
 predSurvTime <- function(kmIn,timeIn) { # expects a data frame with columns of time and surv
   kmIn$surv[max(which(kmIn$time <= timeIn))]
 }
 
 #' Create table of Cox predicted probabilities
 #'
-#' @param KM.hat Survival estimator
-#' @param fixTimes vector of times
-#' @returns Table of predicted probabilities for each time given
+#' @description
+#' Generates tables of predicted probabilities at specified time or vector of
+#' times. The `KM.hat` object contains time and predicted survival
+#' probability information as a list of `survfit` objects.
+#'
+#' @details
+#' The main purpose of this function is to be used within the shiny app for the
+#' purpose of creating predicted probability tables for user-inputted times. For
+#' this reason it is not expressly recommended to use this function outside the
+#' context of the shiny app, but it is still possible to do so if desired.
+#'
+#'
+#' @param KM.hat List of `survfit` objects
+#' @param fixTimes time or vector of times for which predicted survival
+#'  probability is given.
+#' @returns Table of predicted probabilities, one column for each time, and
+#'  one row for each curve.
+#'
+#' @examplesIf interactive()
+#' library(survival)
+#' library(rshinycox)
+#' # First colon is split into three treatment arms
+#' split_colon <- split(colon, colon$rx)
+#'
+#' colon_arm1 <- split_colon$Obs
+#' colon_arm2 <- split_colon$Lev
+#' colon_arm3 <- split_colon$`Lev+5FU`
+#'
+#' # Three coxph models are fit for each treatment
+#'
+#' colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes, colon_arm1,
+#'                  x = TRUE, model = TRUE)
+#' colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm2,
+#'                  x = TRUE, model = TRUE)
+#' colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm3,
+#'                  x = TRUE, model = TRUE)
+#' # Creating list of models
+#' cox.fit.list <- vector("list", 3)
+#' cox.fit.list[[1]] <- prep_coxfit(colon1ph)
+#' cox.fit.list[[2]] <- prep_coxfit(colon2ph)
+#' cox.fit.list[[3]] <- prep_coxfit(colon3ph)
+#'
+#' # Creating new data row for predictions
+#' new.data <- colon[1, ]
+#' # Creating KM.hat object
+#' n.models=length(cox.fit.list)
+#' KM.hat=vector('list',n.models)
+#' lp=rep(NA,n.models)
+#' names(KM.hat)=names(cox.fit.list)
+#' for (i in 1:n.models)
+#' {
+#'  km.hat=predict_one_coxfit(cox.fit.list[[i]],new.data)
+#'  lp[i]=attr(km.hat,'lp')
+#'  sfit=list(time=km.hat$time,surv=km.hat$surv)
+#'  class(sfit)='survfit'
+#'  KM.hat[[i]]=sfit
+#' }
+#'
+#' # Function takes KM.hat object and a time or vector of times
+#' cox_times_table(KM.hat, fixTimes = "100")
+#'
 #' @export
 cox_times_table=function(KM.hat,fixTimes=NULL)
 
@@ -184,7 +246,8 @@ cox_times_table=function(KM.hat,fixTimes=NULL)
 
 #################################
 # write the shiny code to obtain user inputs
-
+#' @returns UI and server code for user inputs
+#' @noRd
 write_coxfit_input_data_code=function(cox.fit.list)
 
 {
@@ -273,7 +336,8 @@ write_coxfit_input_data_code=function(cox.fit.list)
 # get the set of unique predictor
 # variable names
 # from a list of cox.fit objects
-
+#' @returns `data.frame` of variable names and types
+#' @noRd
 #' @importFrom stats na.omit
 get_vnames_cox_fits=function(cox.fit.list)
 {
@@ -303,7 +367,8 @@ get_vnames_cox_fits=function(cox.fit.list)
 
 ###############################
 # Get the levels for the categorical variables
-
+#' @returns levels for categorical variables
+#' @noRd
 get_levels_cox_fits=function(cox.fit.list,vnames)
 {
   # how to deal with logical
@@ -346,6 +411,8 @@ get_levels_cox_fits=function(cox.fit.list,vnames)
 # across a list of cox.fit objects
 # Error, rng.mtx[1,x.name]=min(x.rng[1,j],rng.mtx[1,x.name],na.rm=T)
 #        rng.mtx[2,x.name]=min(x.rng[2,j],rng.mtx[2,x.name],na.rm=T) fixed
+#' @returns range for each numeric variable, as matrix
+#' @noRd
 get_xrng_cox_fits=function(cox.fit.list,vnames)
 
 {
@@ -378,6 +445,8 @@ get_xrng_cox_fits=function(cox.fit.list,vnames)
 # add tab with plot hazard ratio table
 # NEW function
 ########################################
+#' @returns levels for any logic variables, `TRUE` and `FALSE`
+#' @noRd
 get_logic_cox_fits <- function(cox.fit.list, vnames) {
   logic.vars=which(vnames[,"var.type"]=="logical")
   if (length(logic.vars)==0) {
@@ -399,6 +468,9 @@ get_logic_cox_fits <- function(cox.fit.list, vnames) {
 
 # NEW function, proportional hazard for each
 ##################################################################
+#' @returns UI and server code for proportional hazards tables and hazard ratio
+#'  tables
+#' @noRd
 prop_haz_tables <- function(cox.fit.list) {
   ui.code=c("tabsetPanel(")
   server.code=c()
