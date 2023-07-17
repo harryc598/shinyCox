@@ -7,13 +7,68 @@
 cox_times_table(KM.hat, fixTimes = NULL)
 }
 \arguments{
-\item{KM.hat}{Survival estimator}
+\item{KM.hat}{List of \code{survfit} objects}
 
-\item{fixTimes}{vector of times}
+\item{fixTimes}{time or vector of times for which predicted survival
+probability is given.}
 }
 \value{
-Table of predicted probabilities for each time given
+Table of predicted probabilities, one column for each time, and
+one row for each curve.
 }
 \description{
-Create table of Cox predicted probabilities
+Generates tables of predicted probabilities at specified time or vector of
+times. The \code{KM.hat} object contains time and predicted survival
+probability information as a list of \code{survfit} objects.
+}
+\details{
+The main purpose of this function is to be used within the shiny app for the
+purpose of creating predicted probability tables for user-inputted times. For
+this reason it is not expressly recommended to use this function outside the
+context of the shiny app, but it is still possible to do so if desired.
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(survival)
+library(rshinycox)
+# First colon is split into three treatment arms
+split_colon <- split(colon, colon$rx)
+
+colon_arm1 <- split_colon$Obs
+colon_arm2 <- split_colon$Lev
+colon_arm3 <- split_colon$`Lev+5FU`
+
+# Three coxph models are fit for each treatment
+
+colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes, colon_arm1,
+                 x = TRUE, model = TRUE)
+colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm2,
+                 x = TRUE, model = TRUE)
+colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm3,
+                 x = TRUE, model = TRUE)
+# Creating list of models
+cox.fit.list <- vector("list", 3)
+cox.fit.list[[1]] <- prep_coxfit(colon1ph)
+cox.fit.list[[2]] <- prep_coxfit(colon2ph)
+cox.fit.list[[3]] <- prep_coxfit(colon3ph)
+
+# Creating new data row for predictions
+new.data <- colon[1, ]
+# Creating KM.hat object
+n.models=length(cox.fit.list)
+KM.hat=vector('list',n.models)
+lp=rep(NA,n.models)
+names(KM.hat)=names(cox.fit.list)
+for (i in 1:n.models)
+{
+ km.hat=predict_one_coxfit(cox.fit.list[[i]],new.data)
+ lp[i]=attr(km.hat,'lp')
+ sfit=list(time=km.hat$time,surv=km.hat$surv)
+ class(sfit)='survfit'
+ KM.hat[[i]]=sfit
+}
+
+# Function takes KM.hat object and a time or vector of times
+cox_times_table(KM.hat, fixTimes = "100")
+\dontshow{\}) # examplesIf}
 }

@@ -12,9 +12,18 @@ predict_one_coxfit(coxfit, newdata)
 \item{newdata}{vector of new data}
 }
 \value{
-data.frame of predicted survival outcomes
+data.frame of predicted survival outcomes, one column is time, one
+is probability
 }
 \description{
-Computes predicted survival outcome for one patient based
-on a Cox model fit.
+Computes predicted survival outcome for one new data row using coxfit list
+object created by \code{\link[=prep_coxfit]{prep_coxfit()}}.
 }
+\section{Note}{
+
+This function's primary use is within the shiny app, where a \code{coxph} object
+is not available. It can be used outside of that context but that is the
+main purpose of this function, and why it only accepts the return object
+of \code{\link[=prep_coxfit]{prep_coxfit()}}.
+}
+

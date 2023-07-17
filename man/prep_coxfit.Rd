@@ -2,19 +2,33 @@
 % Please edit documentation in R/cox_predictions.R
 \name{prep_coxfit}
 \alias{prep_coxfit}
-\title{Create simplified \code{coxph()} object}
+\title{Create simplified \code{coxph()} object for shiny app}
 \usage{
 prep_coxfit(coxph.result, tol = 1e-07)
 }
 \arguments{
 \item{coxph.result}{Result returned by \code{coxph()}}
 
-\item{tol}{numerical tolerance for prediction differences}
+\item{tol}{numerical tolerance for prediction differences, default is \code{1e-7}}
 }
 \value{
-Simplified \code{coxph()} result, in list form, include what's in it
+list containing baseline survival estimates, linear predictor
+estimates, predictor types, coefficient estimates, mean and range of numeric
+predictors, levels of categorical predictors, strata if any, \code{coxph()}
+formula, table of hazard ratios, table with proportional hazard assumption
+results, number of subjects, and number of events
 }
 \description{
 Simplifies \code{coxph()} output and checks that predictions
-match those of the full model
+match those of the original object
+}
+\examples{
+# First, fit model using coxph
+library(survival)
+bladderph <- coxph(Surv(stop, event) ~ rx + number + size, bladder,
+model = TRUE, x = TRUE)
+# Use coxph object with function
+bladderfit <- prep_coxfit(bladderph)
+
+
 }

@@ -2,65 +2,80 @@
 % Please edit documentation in R/shine_coxph.R
 \name{shine_coxph}
 \alias{shine_coxph}
-\title{Build a shiny app for Cox proportional hazard models}
+\title{Makes a shiny app for predictions from Cox model(s)}
 \usage{
 shine_coxph(..., app.dir = NULL, theme = c("default", "dashboard"))
 }
 \arguments{
-\item{...}{Objects created by \code{coxph()}}
+\item{...}{Any number of Cox proportional hazard models, created by
+\code{\link[survival:coxph]{survival::coxph()}} or this wrapper function, which is more strict in
+order to ensure the models are appropriate for \code{shine_coxph()}}
 
-\item{app.dir}{Directory where shiny app will be written}
+\item{app.dir}{Directory where shiny app is created}
 
-\item{theme}{Theme of shiny app. This changes the overall appearance of the
-app. The first is the default theme, requiring only shiny to use. The
-"dashboard" theme requires the \code{shinydashboard} and \code{DT} packages
-to run properly.}
+\item{theme}{Theme of shiny app.
+\itemize{
+\item \verb{"default}: default theme, requires only shiny
+\item \code{"dashboard"}: requires \code{"shinydashboard"} and \code{"DT"} packages
+}}
 }
 \value{
-A shiny app written into specified directory.
+A list containing Cox model information along with the shiny app
+code. The app is written to the directory while the function is operating.
 }
 \description{
-Generates a shiny app to visualize Cox proportional hazard models created by
-\code{coxph()}
+Writes a shiny app to visualize predicted survival curves from one or
+multiple Cox models. One of the important features of this function is that
+the shiny app, once created, will not contain any identifiable data,
+containing only information necessary for predictions.
 }
-\section{Details}{
+\section{Notes}{
 
 
-One of the important features of this function is that the shiny app, once
-created, will not contain any identifiable data, containing only
-information necessary for predictions. There are some requirements in order
-for this function to run without error: in your original \code{coxph()} function
-or functions, model = TRUE and x = TRUE are required arguments. Because of
-this requirement the use of \code{tt()} is not allowed in our function. As well
-as that, strata by covariate interaction terms are not allowed. Please do
-not use "." in the formula at this time either. There is a function
-included in the package that will handle these requirements and provide
-warnings if your model as constructed is unlikely to work with this
-function.
+There are some requirements in order for this function to run without
+error: in your original \code{\link[survival:coxph]{survival::coxph()}} function or functions,
+\code{model = TRUE} and \code{x = TRUE} are required arguments. Because of this
+requirement the use of \code{tt()} is not allowed in our function. As well as
+that, strata by covariate interaction terms are not allowed. Currently,
+this function does not support penalized models or multi-state models.
+In addition a warning is in order, in that you should not use
+\code{\link[survival:finegray]{survival::finegray()}} when creating Cox models for this function, although
+doing so will not result in an error.
+}
 
-There are some more guidelines for formula notation. There is some leniency
-in that you can use functions inside the formula, but using nested
-functions will fail. Considering the input names used in shiny are taken
-directly from the formula, it is best not to add too many convolutions.
+\section{Guidelines}{
+
+
+In regards to formula notation, the variable names used are ultimately what
+will be displayed in the application. Using functions in the formula will
+work, but with multiple nested functions it will fail. As well, using "."
+notation will not work at the moment. The \code{na.action} is inherited from the
+Cox models, with \code{omit} being the only option with support at this time.
 }
 
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
   library(survival)
+  # Get temporary directory for shiny app
   temp_app_dir <- tempdir()
+  # Data used is from survival package, renamed for legibility
   names(leukemia)[names(leukemia) == "x"] <- "treatment"
+  # Make Cox model, with x = TRUE and model = TRUE
   model1 <- coxph(Surv(time, status) ~ treatment,
-  leukemia, x=TRUE, model=TRUE)
+  leukemia, x = TRUE, model = TRUE)
 
+  # Use shine_coxph() to create shiny app in temporary directory
   shine_coxph("Model 1" = model1, app.dir =
   temp_app_dir)
 
+  # Get directory for shiny app (should be first, check file list if not)
   filedir <- list.files(temp_app_dir)[1]
 
+  # Run shiny app from temporary directory
   shiny::runApp(paste0(temp_app_dir, "/", filedir))
-  files <- list.files(temp_app_dir)
-  file.remove(files)
+  # Remove app from directory once finished
+  unlink(paste0(temp_app_dir,"/",filedir), recursive = TRUE)
 
 \dontshow{\}) # examplesIf}
 }
