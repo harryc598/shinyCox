@@ -63,7 +63,7 @@ for (i in 1:n.models)
  class(sfit)='survfit'
  KM.hat[[i]]=sfit
 }
-# Plotting
+# Plot
 cox_KM_plots(KM.hat)
 
 \dontshow{\}) # examplesIf}
