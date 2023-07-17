@@ -24,6 +24,20 @@ object created by \code{\link[=prep_coxfit]{prep_coxfit()}}.
 This function's primary use is within the shiny app, where a \code{coxph} object
 is not available. It can be used outside of that context but that is the
 main purpose of this function, and why it only accepts the return object
-of \code{\link[=prep_coxfit]{prep_coxfit()}}.
+of \code{\link[=prep_coxfit]{prep_coxfit()}}. In the context of the shiny app, the new data is taken
+from user inputs.
 }
 
+\examples{
+# First, fit model using coxph
+library(survival)
+bladderph <- coxph(Surv(stop, event) ~ rx + number + size, bladder,
+model = TRUE, x = TRUE)
+# Use coxph object with function
+bladderfit <- prep_coxfit(bladderph)
+# Take first row of bladder as 'new data'
+newdata <- bladder[1, ]
+predictions <- predict_one_coxfit(bladderfit, newdata)
+
+
+}
