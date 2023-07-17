@@ -3,17 +3,6 @@
 
 # rshinycox
 
-<!-- badges: start -->
-
-``` r
-usethis::use_cran_badge()
-#> ✔ Setting active project to 'C:/Users/hclement/Documents/rrr/rshinycox'
-#> ✔ Adding CRAN status badge to 'README.Rmd'
-#> • Re-knit 'README.Rmd' with `devtools::build_readme()`
-```
-
-<!-- badges: end -->
-
 The goal of rshinycox is to create a shiny app that displays a predicted
 survival curve or multiple curves. The motivation for this is multifold:
 for one, shiny apps are excellent tools for visualization, but are not
