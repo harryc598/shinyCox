@@ -1,7 +1,7 @@
 
 
-
-
+#' @returns UI and server code for shinydashboard and DT
+#' @noRd
 make_DT_table <- function(cox.fit.list) {
   uicodetop <- c("menuItem('Summary Tables',",
                  "         tabName = 'tables', icon = icon('table'),")
@@ -58,6 +58,44 @@ make_DT_table <- function(cox.fit.list) {
   code.res <- list(uitop = uicodetop,
                    uibottom = uicodebottom,
                    server.code = servercode)
+  return(code.res)
 }
 
+#' Wrapper for `survival::coxph()`
+#'
+#' Performs [survival::coxph()] with `model = TRUE` and `x = TRUE` as defaults.
+#' Checks that Cox model is appropriate for use with [shine_coxph()].
+#'
+#' @inheritParams survival::coxph
+#' @param ... other arguments which will be passed to `coxph()`. Note that
+#'  `x = TRUE` and `model = TRUE` are the default arguments, you do not need
+#'  to include them here.
+#' @returns Object of class `"coxph"` representing the fit.
+#'
+#' @examples
+#' library(survival)
+#' ovarianph <- make_coxph(Surv(futime, fustat) ~ age + strata(rx),
+#' data = ovarian)
+#' @export
+make_coxph <- function(formula, data, ...) {
+  Call <- match.call()
+  Call$model <- TRUE
+  Call$x <- TRUE
+  Call[[1]] <- quote(coxph)
+  cox_model <- eval(Call)
+  if(!is.null(cox_model$call$tt)) {
+    stop("tt terms cannot be used in the shine_cox() function")
+  }
+  if(inherits(cox_model, "coxphms")) {
+    stop("This appears to be a multistate model, which is not appropiate for the shine_cox function.")
+  }
+  if(inherits(cox_model, "coxph.penal")) {
+    stop("This appears to be a penalized Cox model, which is not currently
+            supported for use with shine_coxph()")
+  }
+  if("fgwt" %in% names(data)) {
+    warning("Your dataset appears to be made using the finegray() function. This is not an appropiate model to use with shine_coxph()")
+  }
+  return(cox_model)
+}
 

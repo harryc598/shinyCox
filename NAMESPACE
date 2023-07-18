@@ -2,6 +2,7 @@
 
 export(cox_KM_plots)
 export(cox_times_table)
+export(make_coxph)
 export(predict_one_coxfit)
 export(prep_coxfit)
 export(shine_coxph)
