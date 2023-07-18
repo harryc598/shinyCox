@@ -213,16 +213,13 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   server.code <- c("server = function(input,output)",
                 "{",
                 "          observeEvent(input$app.exit, {stopApp()}) # Exit when exit button is pressed",
+                table.code$server.code, ### NEW
                 "          observeEvent(input$go, {",
-
                 input.data.code$server.code,
                 KM.plot.code$server.code,
-                table.code$server.code, ### NEW
                 "predProbTable <- cox_times_table(KM.hat,input$predProbTimes)", # SUBODH ADDITION
                 "if (is.null(predProbTable)) output$noPredTimes <- renderText('No input times detected. If you provided times, check that you separated numbers with a single comma and you provided valid numbers.') else output$noPredTimes <- renderText(invisible())", # SUBODH ADDITION
                 "output$cox.times <- renderTable(predProbTable, rownames = TRUE)", # SUBODH ADDITION
-                "output$HR <- renderTable(cox.fit.list[[1]]$HR.table, rownames = TRUE)", # SUBODH ADDITION
-                "output$PHA <- renderTable(cox.fit.list[[1]]$PHA.table$table, rownames = TRUE)", # SUBODH ADDITION
                 "colors <- palette.colors(length(cox.fit.list), input$clrs)", # colors
                 "output$downloadPlot <- downloadHandler(",
                 "  filename = function() { paste0('plot.png') },",
