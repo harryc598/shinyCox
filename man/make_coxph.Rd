@@ -20,11 +20,12 @@ make_coxph(formula, data, ...)
     argument. 
   }
 
-\item{...}{Other arguments will be passed to \code{\link[survival]{coxph.control}}
-  }
+\item{...}{other arguments which will be passed to \code{coxph()}. Note that
+\code{x = TRUE} and \code{model = TRUE} are the default arguments, you do not need
+to include them here.}
 }
 \value{
-Object of class \code{coxph} representing the fit.
+Object of class \code{"coxph"} representing the fit.
 }
 \description{
 Performs \code{\link[survival:coxph]{survival::coxph()}} with \code{model = TRUE} and \code{x = TRUE} as defaults.
