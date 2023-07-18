@@ -265,7 +265,9 @@ check_coxfit <- function(cox.fit, coxph.result, tol = 1e-7) {
     # 'x' from the original data frame needs to be added to our newdata
 
     vars <- all.vars(coxph.result$formula)
-    if(!exists(coxph.result$call$data)) {
+    dataloc <- which(all.vars(coxph.result$call) %in% as.character(coxph.result$call$data))
+    dataname <- all.vars(coxph.result$call)[dataloc]
+    if(!exists(dataname)) {
       stop("Dataset(s) must be in environment while the function is running.
            Afterwords the original data are no longer needed.")
     }
