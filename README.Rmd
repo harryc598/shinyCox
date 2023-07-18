@@ -20,6 +20,10 @@ knitr::opts_chunk$set(
 The goal of rshinycox is to create a shiny app that displays a predicted survival curve or multiple curves. The motivation for this is multifold: for one, shiny apps are excellent tools for visualization, but are not always a straightforward process. This package allows the statistician to input their finished Cox models into the function `shine_coxph()` and it will create a shiny app for the user, with no other work required. The other motivation was to create an app that contained none of the original data used to create the Cox models. With this requirement, there is no worry of disclosing private data. So `shine_coxph()` will use the data for verification purposes, but discard it when the app is made, containing only the bare necessities to make predictions.
 
 ## Installation
+You can install this package using:
+```r
+install.packages("rshinycox")
+```
 
 You can install the development version of rshinycox from [GitHub](https://github.com/) with:
 

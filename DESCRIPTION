@@ -1,13 +1,21 @@
 Package: rshinycox
-Title: Generates Shiny Application for Cox Proportional Hazards Model
-Version: 0.0.0.9000
+Title: Create Shiny Applications for Cox Proportional Hazards Models
+Version: 0.1.0
 Authors@R: c(
-    person("Stanley", "Pounds", , "stanley.pounds@stjude.org", role = c("aut", "cph")),
-    person("Subodh", "Selukar", , "subodh.selukar@stjude.org", role = "aut"),
-    person("Harrison", "Clement", , "harrisonclement16@gmail.com", role = c("aut", "cre")),
+    person("Stanley", "Pounds",
+    email = "stanley.pounds@stjude.org", role = c("aut", "cph")),
+    person("Subodh", "Selukar", 
+    email = "subodh.selukar@stjude.org", role = "aut"),
+    person("Harrison", "Clement", 
+    email = "harrisonclement16@gmail.com", role = c("aut", "cre")),
     person("St Jude Children's Research Hospital", role = "fnd")
   )
-Description: What the package does (one paragraph).
+Description: Takes one or more Cox proportional hazards models and writes a
+    'shiny' application to a directory specified by the user. The 'shiny' app
+    displays predicted survival curves based on user input, and contains none
+    of the original data used to create the Cox model or models. The main 
+    intention is towards visualization and presentation of predicted survival
+    curves.
 License: MIT + file LICENSE
 URL: https://github.com/harryc598/rshinycox
 BugReports: https://github.com/harryc598/rshinycox/issues
@@ -16,8 +24,7 @@ Imports:
     survival (>= 3.3)
 Suggests: 
     DT,
-    shinydashboard,
-    testthat (>= 3.0.0)
+    shinydashboard
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

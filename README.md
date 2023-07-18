@@ -17,6 +17,12 @@ made, containing only the bare necessities to make predictions.
 
 ## Installation
 
+You can install this package using:
+
+``` r
+install.packages("rshinycox")
+```
+
 You can install the development version of rshinycox from
 [GitHub](https://github.com/) with:
 
