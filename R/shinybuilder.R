@@ -63,7 +63,7 @@ write_KM_plot_code=function(cox.fit.list,clrs)
 #' @details
 #' The main purpose of this function is to be used to create plots within the
 #' shiny app created by [shine_coxph()]. For this reason the argument it takes,
-#' \code{KM.hat}, is created through a process delineated in the example. This
+#' `KM.hat`, is created through a process delineated in the example. This
 #' can make the function more complicated if you want to use it outside of
 #' the shiny app, although it is fully possible to do so.
 #'
