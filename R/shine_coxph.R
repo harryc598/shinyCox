@@ -67,6 +67,7 @@
 #' @export
 #' @importFrom grDevices hcl.colors
 #' @importFrom shiny showTab
+#' @importFrom utils menu
 shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
 
 {
@@ -107,7 +108,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   # get app directory
   #app.dir=input.list$app.dir
   if (is.null(app.dir)) {
-    check <- menu(c("Yes", "No, I'll provide a directory"),
+    check <- utils::menu(c("Yes", "No, I'll provide a directory"),
                   title = "You have not specified an app directory. Would you like to use the working directory?")
     if(check == 1) {
     app.dir <- getwd()
@@ -138,7 +139,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   #######################
   # get different code sections
   input.data.code <- write_coxfit_input_data_code(coxfit.list)
-  KM.plot.code <- write_KM_plot_code(coxfit.list, clrs)
+  KM.plot.code <- write_KM_plot_code(coxfit.list)
   theme <- match.arg(theme)
   if (theme == "default") {
   table.code <- prop_haz_tables(cox.fit.list)

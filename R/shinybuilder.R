@@ -3,10 +3,9 @@
 #' Write shiny code to create plots
 #'
 #' @param cox.fit.list List object created by [prep_coxfit()]
-#' @param clrs vector of colors for lines (deprecated)
 #' @returns Vector of code used in shiny app to generate plots
 #' @noRd
-write_KM_plot_code=function(cox.fit.list,clrs)
+write_KM_plot_code=function(cox.fit.list)
 {
   n.models=length(cox.fit.list)
   ui.code=server.code=NULL
