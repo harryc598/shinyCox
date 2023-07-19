@@ -11,7 +11,11 @@ shine_coxph(..., app.dir = NULL, theme = c("default", "dashboard"))
 \code{\link[survival:coxph]{survival::coxph()}} or this wrapper function, which is more strict in
 order to ensure the models are appropriate for \code{shine_coxph()}}
 
-\item{app.dir}{Directory where shiny app is created}
+\item{app.dir}{Directory where shiny app is created. Specifically, a folder
+will be made containing the \code{app.R} file as well as the \code{.Rdata} file. If
+no directory is provided, the folder will be created in the working
+directory, with the user having the opportunity to confirm this or stop the
+function and provide a directory.}
 
 \item{theme}{Theme of shiny app.
 \itemize{
