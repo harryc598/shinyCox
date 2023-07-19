@@ -8,7 +8,11 @@
 #' @param ... Any number of Cox proportional hazard models, created by
 #'  [survival::coxph()] or this wrapper function, which is more strict in
 #'  order to ensure the models are appropriate for `shine_coxph()`
-#' @param app.dir Directory where shiny app is created
+#' @param app.dir Directory where shiny app is created. Specifically, a folder
+#'  will be made containing the `app.R` file as well as the `.Rdata` file. If
+#'  no directory is provided, the folder will be created in the working
+#'  directory, with the user having the opportunity to confirm this or stop the
+#'  function and provide a directory.
 #' @param theme Theme of shiny app.
 #'  * `"default`: default theme, requires only shiny
 #'  * `"dashboard"`: requires `"shinydashboard"` and `"DT"` packages
@@ -69,12 +73,17 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   ########################
   # determine the class of each input argument
   input.list <- list(...)
+  if(inherits(input.list[[1]], "coxph.penal")) {
+    stop("shine_coxph does not currently support penalized Cox models")
+  } else if(inherits(input.list[[1]], "coxms")) {
+    stop("shine_coxph does not currently support multi-state models")
+  } else
   n.list <- length(input.list)
   list.class <- rep("",n.list)
   for (i in 1:n.list) {
     list.class[i] <- class(input.list[[i]])
   }
-## ERROR for CLASS coxms, coxph.penal
+
   #######################
   # extract the coxph models from the input
   cox.list <- which(list.class == "coxph")
@@ -89,16 +98,22 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   # get colors list
   # RColorBrewer brewer.pal
   # I don't think this is necessary anymore
-  clrs=input.list$clrs
-  if (is.null(clrs)) {
-    clrs=hcl.colors(n.model, "Dark 2", alpha = 1)
-  }
+  # clrs=input.list$clrs
+  # if (is.null(clrs)) {
+  #   clrs=hcl.colors(n.model, "Dark 2", alpha = 1)
+  # }
 
   ##########################
   # get app directory
   #app.dir=input.list$app.dir
   if (is.null(app.dir)) {
+    check <- menu(c("Yes", "No, I'll provide a directory"),
+                  title = "You have not specified an app directory. Would you like to use the working directory?")
+    if(check == 1) {
     app.dir <- getwd()
+    } else {
+      return(invisible())
+    }
   }
   date.time <- as.character(Sys.time())
   date.time <- gsub(":", "-", date.time, fixed=TRUE)
@@ -118,7 +133,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   #######################
   # Save app data into app directory
   cox.fit.list <- coxfit.list
-  save(cox.fit.list, clrs, file = paste0(app.dir, "appData.Rdata"))
+  save(cox.fit.list, file = paste0(app.dir, "appData.Rdata"))
 
   #######################
   # get different code sections
