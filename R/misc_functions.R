@@ -44,9 +44,11 @@ make_DT_table <- function(cox.fit.list) {
                            "                                     options = list(",
                            "                                     dom = 't'",
                            "                                     )) |>",
+                           "                 # The formatRound() function is set to give four digits after the decimal, change 'digits' to alter this",
                            "                 DT::formatRound(columns = c('Hazard Ratio', 'Lower Bound', 'Upper Bound', 'p value'), digits = 4) |>",
                            "                 DT::formatStyle('p value',",
                            "                                 target = 'cell',",
+                           "                                 # the fontweight argument will bold cells under a certain value, the default is 0.05",
                            "                                 fontweight = DT::styleInterval(0.05, c('bold', 'normal'))))",
                     paste0("output$PHA", i, "=DT::renderDataTable(DT::datatable(cox.fit.list[[", i, "]]$PHA.table$table,"),
                            "                                      options = list(",
@@ -79,6 +81,12 @@ make_DT_table <- function(cox.fit.list) {
 #' @export
 make_coxph <- function(formula, data, ...) {
   Call <- match.call()
+  if(missing(formula)) {
+    stop("a formula argument is required")
+  }
+  if(missing(data)) {
+    stop("a data argument is required")
+  }
   Call$model <- TRUE
   Call$x <- TRUE
   Call[[1]] <- quote(coxph)
@@ -98,4 +106,3 @@ make_coxph <- function(formula, data, ...) {
   }
   return(cox_model)
 }
-
