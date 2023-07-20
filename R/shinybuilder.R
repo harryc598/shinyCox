@@ -141,10 +141,11 @@ cox_KM_plots=function(KM.hat,clrs=NULL)
     lines(KM.hat[[i]],col=clrs[i], lwd = 2)
   }
 
-  legend(1.05*max.time,1,
-         col=clrs,lwd=1,
-         legend=names(KM.hat),
-         cex=1)
+  # legend(1.05*max.time,1,
+  #        col=clrs,lwd=1,
+  #        legend=names(KM.hat),
+  #        cex=1)
+  legend("topright", col = clrs, lwd = 1, legend = names(KM.hat), cex = 1)
 }
 
 #############################
@@ -476,7 +477,7 @@ prop_haz_tables <- function(cox.fit.list) {
     if(i < length(cox.fit.list)) {
       ui.code = c(ui.code,paste0("tabPanel('",names(cox.fit.list)[i],"',"),
                   paste0("h5(textOutput(outputId = 'title", i, "')),"),
-                  "'Hazard Ratio Summary Table',",
+                  "h4('Hazard Ratio Summary Table'),",
                   paste0("column(12, align = 'center', tableOutput(outputId = 'HR", i, "')),"),
                   "h4('Assesing the Proportional Hazards Assumption'),",
                   paste0("column(12, align = 'center', tableOutput(outputId = 'PHA", i, "')),"),
