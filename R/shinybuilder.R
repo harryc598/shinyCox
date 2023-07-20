@@ -62,9 +62,9 @@ write_KM_plot_code=function(cox.fit.list)
 #' @details
 #' The main purpose of this function is to be used to create plots within the
 #' shiny app created by [shine_coxph()]. For this reason the argument it takes,
-#' `KM.hat`, is created through a process delineated in the example. This
-#' can make the function more complicated if you want to use it outside of
-#' the shiny app, although it is fully possible to do so.
+#' `KM.hat`, is created through a process delineated in the example. This can
+#' make the function more complicated if you want to use it outside of the shiny
+#' app, although it is fully possible to do so.
 #'
 #' @examplesIf interactive()
 #' library(survival)
@@ -77,12 +77,15 @@ write_KM_plot_code=function(cox.fit.list)
 #'
 #' # Three coxph models are fit for each treatment
 #'
-#' colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes, colon_arm1,
-#'                  x = TRUE, model = TRUE)
-#' colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm2,
-#'                  x = TRUE, model = TRUE)
-#' colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm3,
-#'                  x = TRUE, model = TRUE)
+#' colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes,
+#'                   colon_arm1, x = TRUE, model = TRUE)
+#'
+#' colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes,
+#'                   colon_arm2, x = TRUE, model = TRUE)
+#'
+#' colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes,
+#'                   colon_arm3, x = TRUE, model = TRUE)
+#'
 #' # Creating list of models
 #' cox.fit.list <- vector("list", 3)
 #' cox.fit.list[[1]] <- prep_coxfit(colon1ph)
@@ -182,12 +185,15 @@ predSurvTime <- function(kmIn,timeIn) { # expects a data frame with columns of t
 #'
 #' # Three coxph models are fit for each treatment
 #'
-#' colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes, colon_arm1,
-#'                  x = TRUE, model = TRUE)
-#' colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm2,
-#'                  x = TRUE, model = TRUE)
-#' colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm3,
-#'                  x = TRUE, model = TRUE)
+#' colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes,
+#'                   colon_arm1, x = TRUE, model = TRUE)
+#'
+#' colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes,
+#'                   colon_arm2, x = TRUE, model = TRUE)
+#'
+#' colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes,
+#'                   colon_arm3, x = TRUE, model = TRUE)
+#'
 #' # Creating list of models
 #' cox.fit.list <- vector("list", 3)
 #' cox.fit.list[[1]] <- prep_coxfit(colon1ph)
@@ -214,29 +220,29 @@ predSurvTime <- function(kmIn,timeIn) { # expects a data frame with columns of t
 #' cox_times_table(KM.hat, fixTimes = "100")
 #'
 #' @export
-cox_times_table=function(KM.hat,fixTimes=NULL)
-
-{
+cox_times_table <- function(KM.hat, fixTimes = NULL) {
   n.models=length(KM.hat)
 
-  if (is.null(names(KM.hat))) {
-    names(KM.hat)=paste0("model ",1:n.models)
+  if(is.null(names(KM.hat))) {
+    names(KM.hat) <- paste0("model ", 1:n.models)
   }
 
-  if (is.null(fixTimes) | fixTimes=="") {
+  if(is.null(fixTimes) | fixTimes == "") {
     return(NULL)
   } else {
-    predTimes <- as.numeric(unlist(strsplit(fixTimes,split=","))) # expects an input character string of numbers each separated by a comma
-    if (any(is.na(predTimes))) return(NULL)
+    predTimes <- as.numeric(unlist(strsplit(fixTimes, split = ","))) # expects an input character string of numbers each separated by a comma
+    if(any(is.na(predTimes))) {
+      return(NULL)
+    }
   }
 
-  tabOut <- matrix(nrow=n.models,ncol=length(predTimes))
+  tabOut <- matrix(nrow = n.models, ncol = length(predTimes))
   rownames(tabOut) <- names(KM.hat)
-  colnames(tabOut) <- paste("Time:",predTimes)
+  colnames(tabOut) <- paste("Time:", predTimes)
 
-  for (i in 1:n.models){
-    for (j in 1:length(predTimes)){
-      tabOut[i,j] <- predSurvTime(KM.hat[[i]],predTimes[j])
+  for (i in 1:n.models) {
+    for (j in 1:length(predTimes)) {
+      tabOut[i, j] <- predSurvTime(KM.hat[[i]], predTimes[j])
     }
   }
   return(tabOut)
@@ -247,85 +253,75 @@ cox_times_table=function(KM.hat,fixTimes=NULL)
 # write the shiny code to obtain user inputs
 #' @returns UI and server code for user inputs
 #' @noRd
-write_coxfit_input_data_code=function(cox.fit.list)
-
-{
+write_coxfit_input_data_code <- function(cox.fit.list) {
 
   if(is.null(names(cox.fit.list))) {
-    names(cox.fit.list)=paste0("model ",1:length(cox.fit.list))
+    names(cox.fit.list) <- paste0("model ", 1:length(cox.fit.list))
   }
 
   ###############
   # Get the set of input variables across all models
-  vnames=get_vnames_cox_fits(cox.fit.list)
+  vnames <- get_vnames_cox_fits(cox.fit.list)
 
   ############
   # Get the range of numeric predictor variables
-  num.x.rng.mtx=get_xrng_cox_fits(cox.fit.list,
-                                  vnames)
+  num.x.rng.mtx <- get_xrng_cox_fits(cox.fit.list,
+                                     vnames)
 
   ###########
   # Get the levels of categorical predictor variables
-  cat.lvls=get_levels_cox_fits(cox.fit.list,
-                               vnames)
-  # NEW
-  #######################################################################
+  cat.lvls <- get_levels_cox_fits(cox.fit.list,
+                                  vnames)
+
   # Get levels of logic predictors
   logic.lvls <- get_logic_cox_fits(cox.fit.list, vnames)
-  ########################################################################
-  #############
+
   # Generate shiny code for each variable
 
   ui.code=server.code=NULL # initialize shiny code for ui and server
 
-  if(!is.null(cat.lvls))
-  {
-    for (i in 1:length(cat.lvls))
-    {
+  if(!is.null(cat.lvls)) {
+    for (i in 1:length(cat.lvls)) {
       cat.pick=ez_pickone(names(cat.lvls)[i],
                           tools::toTitleCase(names(cat.lvls)[i]),
                           cat.lvls[i])
-      ui.code=c(ui.code,cat.pick$ui.code)
+      ui.code=c(ui.code, cat.pick$ui.code)
       server.code=c(server.code,
                     cat.pick$server.code)
     }
   }
-  #NEW
-  ######################################################################
-  if(!is.null(logic.lvls))
-  {
-    for (i in 1:length(logic.lvls))
-    {
-      logic.pick=ez_pickone_logic(names(logic.lvls)[i],
-                                  tools::toTitleCase(names(logic.lvls)[i]),
-                                  logic.lvls[i])
-      ui.code=c(ui.code,logic.pick$ui.code)
-      server.code=c(server.code,
-                    logic.pick$server.code)
+
+  # Logic variables need their own handlers
+  if(!is.null(logic.lvls)) {
+    for (i in 1:length(logic.lvls)) {
+      logic.pick <- ez_pickone_logic(names(logic.lvls)[i],
+                                     tools::toTitleCase(names(logic.lvls)[i]),
+                                     logic.lvls[i])
+      ui.code <- c(ui.code, logic.pick$ui.code)
+      server.code <- c(server.code,
+                       logic.pick$server.code)
     }
   }
   ##########################################################################
 
-  if(!is.null(num.x.rng.mtx))
-  {
-    for (i in 1:ncol(num.x.rng.mtx))
-    {
+  if(!is.null(num.x.rng.mtx)) {
+    for (i in 1:ncol(num.x.rng.mtx)) {
       x.slider=ez_slider(colnames(num.x.rng.mtx)[i],
                          colnames(num.x.rng.mtx)[i],
                          num.x.rng.mtx[1,i],
                          num.x.rng.mtx[2,i],
-                         mean(num.x.rng.mtx[,i])) # Harrison fixed index
-      ui.code=c(ui.code,x.slider$ui.code)
+                         mean(num.x.rng.mtx[,i]))
+      ui.code=c(ui.code, x.slider$ui.code)
       server.code=c(server.code,
                     x.slider$server.code)
     }
   }
 
   new.data.code=paste0("new.data = cbind.data.frame(",
-                       paste0(server.code,collapse=","),")")
+                       paste0(server.code, collapse = ","), ")")
 
-  code.res=list(ui.code=ui.code,
-                server.code=new.data.code)
+  code.res=list(ui.code = ui.code,
+                server.code = new.data.code)
 
   return(code.res)
 
@@ -338,8 +334,7 @@ write_coxfit_input_data_code=function(cox.fit.list)
 #' @returns `data.frame` of variable names and types
 #' @noRd
 #' @importFrom stats na.omit
-get_vnames_cox_fits=function(cox.fit.list)
-{
+get_vnames_cox_fits <- function(cox.fit.list) {
   n.models=length(cox.fit.list)
   var.name=NULL
   var.type=NULL
@@ -368,10 +363,9 @@ get_vnames_cox_fits=function(cox.fit.list)
 # Get the levels for the categorical variables
 #' @returns levels for categorical variables
 #' @noRd
-get_levels_cox_fits=function(cox.fit.list,vnames)
-{
+get_levels_cox_fits <- function(cox.fit.list,vnames) {
   # how to deal with logical
-  cat.vars=which(vnames[,"var.type"]!="numeric" & vnames[,"var.type"]!="logical")
+  cat.vars=which(vnames[, "var.type"]!="numeric" & vnames[, "var.type"]!="logical")
   if (length(cat.vars)==0)
     return(NULL)
 
@@ -433,8 +427,8 @@ get_xrng_cox_fits=function(cox.fit.list,vnames)
     for (j in 1:ncol(rng.mtx))
     {
       x.name=colnames(rng.mtx)[j]
-      rng.mtx[1,x.name] <- min(x.rng[1,x.name],rng.mtx[1,x.name],na.rm = TRUE)
-      rng.mtx[2,x.name] <- max(x.rng[2,x.name],rng.mtx[2,x.name],na.rm = TRUE) #changed from min()
+      rng.mtx[1, x.name] <- min(x.rng[1, x.name], rng.mtx[1, x.name], na.rm = TRUE)
+      rng.mtx[2, x.name] <- max(x.rng[2, x.name], rng.mtx[2, x.name], na.rm = TRUE)
     }
   }
   return(rng.mtx)

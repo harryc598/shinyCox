@@ -20,9 +20,9 @@ Generate Cox predicted KM plots
 \details{
 The main purpose of this function is to be used to create plots within the
 shiny app created by \code{\link[=shine_coxph]{shine_coxph()}}. For this reason the argument it takes,
-\code{KM.hat}, is created through a process delineated in the example. This
-can make the function more complicated if you want to use it outside of
-the shiny app, although it is fully possible to do so.
+\code{KM.hat}, is created through a process delineated in the example. This can
+make the function more complicated if you want to use it outside of the shiny
+app, although it is fully possible to do so.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -36,12 +36,15 @@ colon_arm3 <- split_colon$`Lev+5FU`
 
 # Three coxph models are fit for each treatment
 
-colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes, colon_arm1,
-                 x = TRUE, model = TRUE)
-colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm2,
-                 x = TRUE, model = TRUE)
-colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm3,
-                 x = TRUE, model = TRUE)
+colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes,
+                  colon_arm1, x = TRUE, model = TRUE)
+
+colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes,
+                  colon_arm2, x = TRUE, model = TRUE)
+
+colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes,
+                  colon_arm3, x = TRUE, model = TRUE)
+
 # Creating list of models
 cox.fit.list <- vector("list", 3)
 cox.fit.list[[1]] <- prep_coxfit(colon1ph)

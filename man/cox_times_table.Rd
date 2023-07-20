@@ -40,12 +40,15 @@ colon_arm3 <- split_colon$`Lev+5FU`
 
 # Three coxph models are fit for each treatment
 
-colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes, colon_arm1,
-                 x = TRUE, model = TRUE)
-colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm2,
-                 x = TRUE, model = TRUE)
-colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm3,
-                 x = TRUE, model = TRUE)
+colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes,
+                  colon_arm1, x = TRUE, model = TRUE)
+
+colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes,
+                  colon_arm2, x = TRUE, model = TRUE)
+
+colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes,
+                  colon_arm3, x = TRUE, model = TRUE)
+
 # Creating list of models
 cox.fit.list <- vector("list", 3)
 cox.fit.list[[1]] <- prep_coxfit(colon1ph)
