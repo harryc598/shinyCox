@@ -158,6 +158,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   # generate ui code
   if (theme == "default") {
   ui.code <- c("ui=navbarPage(",
+               " # Change app title with the argument below",
             "             'Cox Model Survival Predictions',",
             "    tabPanel('Plot',",
             "             sidebarLayout(",
@@ -188,6 +189,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   } else if (theme == "dashboard") {
     ui.code <- c("library(shinydashboard)",
                      "ui = dashboardPage(",
+                     " # Change title of app with dashboardHeader argument",
                      "           dashboardHeader(title = 'Cox Model Survival Predictions'),",
                      "           dashboardSidebar(",
                      "             sidebarMenu(",
