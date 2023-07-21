@@ -16,7 +16,9 @@ make_DT_table <- function(cox.fit.list) {
     )
     uicodebottom <- c(uicodebottom,
                       paste0("tabItem('table", i, "',"),
-                      paste0("h5(textOutput(outputId = 'title", i, "')),"),
+                      "fluidRow(",
+                      paste0("infoBoxOutput('subjects", i, "'),"),
+                      paste0("infoBoxOutput('events", i, "')),"),
                       "h4('Hazard Ratio Summary Table'),",
                       paste0("DT::dataTableOutput(outputId = 'HR", i, "'),"),
                       "h4('Assesing the Proportional Hazards Assumption'),",
@@ -31,7 +33,9 @@ make_DT_table <- function(cox.fit.list) {
 
     uicodebottom <- c(uicodebottom,
                       paste0("tabItem('table", i, "',"),
-                      paste0("h5(textOutput(outputId = 'title", i, "')),"),
+                      "fluidRow(",
+                      paste0("infoBoxOutput('subjects", i, "'),"),
+                      paste0("infoBoxOutput('events", i, "')),"),
                       "h4('Hazard Ratio Summary Table'),",
                       paste0("DT::dataTableOutput(outputId = 'HR", i, "'),"),
                       "h4('Assesing the Proportional Hazards Assumption'),",
@@ -53,7 +57,12 @@ make_DT_table <- function(cox.fit.list) {
                     paste0("output$PHA", i, "=DT::renderDataTable(DT::datatable(cox.fit.list[[", i, "]]$PHA.table$table,"),
                            "                                      options = list(",
                            "                                      dom = 't')))",
-                           paste0("output$title", i, "=renderText(paste(cox.fit.list[[",i,"]]$nsample, 'subjects,', cox.fit.list[[",i, "]]$nevents, 'events'))")
+                           paste0("output$subjects", i, "=renderInfoBox({"),
+                           paste0("infoBox('Subjects', cox.fit.list[[", i, "]]$nsample,"),
+                           "       color = 'red', icon = icon('hospital-user'))})",
+                           paste0("output$events", i, "=renderInfoBox({"),
+                           paste0("infoBox('Events', cox.fit.list[[", i, "]]$nevents,"),
+                    "       color = 'red', icon = icon('file-medical'))})"
                     )
 
   }
