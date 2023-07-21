@@ -476,7 +476,7 @@ prop_haz_tables <- function(cox.fit.list) {
 
     if(i < length(cox.fit.list)) {
       ui.code = c(ui.code,paste0("tabPanel('",names(cox.fit.list)[i],"',"),
-                  paste0("h5(textOutput(outputId = 'title", i, "')),"),
+                  paste0("h4(textOutput(outputId = 'title", i, "')),"),
                   "h4('Hazard Ratio Summary Table'),",
                   paste0("column(12, align = 'center', tableOutput(outputId = 'HR", i, "')),"),
                   "h4('Assesing the Proportional Hazards Assumption'),",
@@ -484,7 +484,7 @@ prop_haz_tables <- function(cox.fit.list) {
                   paste0("textOutput(outputId = 'nevents", i, "')"),
                   "),") } else
                     ui.code = c(ui.code,paste0("tabPanel('",names(cox.fit.list)[i],"',"),
-                                paste0("h5(textOutput(outputId = 'title", i, "')),"),
+                                paste0("h4(textOutput(outputId = 'title", i, "')),"),
                                 "'Hazard Ratio Summary Table',",
                                 paste0("column(12, align = 'center', tableOutput(outputId = 'HR", i, "')),"),
                                 "h4('Assesing the Proportional Hazards Assumption'),",
