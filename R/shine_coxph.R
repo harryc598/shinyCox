@@ -1,7 +1,7 @@
 #' Makes a shiny app for predictions from Cox model(s)
 #'
 #' Writes a shiny app to visualize predicted survival curves from one or
-#' multiple Cox models. One of the important features of this function is that
+#' multiple Cox models. One feature of this function is that
 #' the shiny app, once created, will not contain any identifiable data,
 #' containing only information necessary for predictions.
 #'
@@ -20,14 +20,14 @@
 #' @section Notes:
 #'
 #'   There are some requirements in order for this function to run without
-#'   error: in your original [survival::coxph()] function or functions,
-#'   `model = TRUE` and `x = TRUE` are required arguments. Because of this
-#'   requirement the use of `tt()` is not allowed in our function. As well as
-#'   that, strata by covariate interaction terms are not allowed. Currently,
-#'   this function does not support penalized models or multi-state models.
-#'   In addition a warning is in order, in that you should not use
-#'   [survival::finegray()] when creating Cox models for this function, although
-#'   doing so will not result in an error.
+#'   error: in your original [survival::coxph()] function or functions, `model =
+#'   TRUE` and `x = TRUE` are required arguments. Because of this requirement
+#'   the use of `tt()` is not allowed in our function. As well as that, strata
+#'   by covariate interaction terms are not allowed. Currently, this function
+#'   does not support penalized models, and it will not support multi-state
+#'   models for the forseeable future. In addition a warning is in order, in
+#'   that you should not use [survival::finegray()] when creating Cox models for
+#'   this function, although doing so will not result in an error.
 #'
 #' @section Guidelines:
 #'
@@ -95,14 +95,6 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   }
   names(model.list) <- names(input.list)[cox.list]
 
-  #######################
-  # get colors list
-  # RColorBrewer brewer.pal
-  # I don't think this is necessary anymore
-  # clrs=input.list$clrs
-  # if (is.null(clrs)) {
-  #   clrs=hcl.colors(n.model, "Dark 2", alpha = 1)
-  # }
 
   ##########################
   # get app directory
@@ -172,8 +164,8 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
             "actionButton(inputId = 'app.exit', label = 'Exit App'),",
             "selectInput('clrs', label = 'Choose Colors', choices = palette.pals(), selected = 'Okabe-Ito'),", # color choice
             "hr(),",
-            "numericInput('height', 'Plot Height', value = 100),",
-            "numericInput('width', 'Plot Width', value = 100),",
+            "numericInput('height', 'Plot Height', value = 400),",
+            "numericInput('width', 'Plot Width', value = 800),",
             "downloadButton('downloadPlot', 'Download Plot')",
             "),",
             "mainPanel(",
@@ -211,8 +203,8 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
                      "actionButton(inputId = 'app.exit', label = 'Exit App'),",
                      "selectInput('clrs', label = 'Choose Colors', choices = palette.pals(), selected = 'Okabe-Ito'),", # color choice
                      "hr(),",
-                     "numericInput('height', 'Plot Height', value = 100),",
-                     "numericInput('width', 'Plot Width', value = 100),",
+                     "numericInput('height', 'Plot Height', value = 400),",
+                     "numericInput('width', 'Plot Width', value = 800),",
                      "downloadButton('downloadPlot', 'Download Plot')",
                      "),",
                      "mainPanel(",
