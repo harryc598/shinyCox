@@ -29,7 +29,7 @@ code. The app is written to the directory while the function is operating.
 }
 \description{
 Writes a shiny app to visualize predicted survival curves from one or
-multiple Cox models. One of the important features of this function is that
+multiple Cox models. One feature of this function is that
 the shiny app, once created, will not contain any identifiable data,
 containing only information necessary for predictions.
 }
@@ -37,14 +37,13 @@ containing only information necessary for predictions.
 
 
 There are some requirements in order for this function to run without
-error: in your original \code{\link[survival:coxph]{survival::coxph()}} function or functions,
-\code{model = TRUE} and \code{x = TRUE} are required arguments. Because of this
-requirement the use of \code{tt()} is not allowed in our function. As well as
-that, strata by covariate interaction terms are not allowed. Currently,
-this function does not support penalized models or multi-state models.
-In addition a warning is in order, in that you should not use
-\code{\link[survival:finegray]{survival::finegray()}} when creating Cox models for this function, although
-doing so will not result in an error.
+error: in your original \code{\link[survival:coxph]{survival::coxph()}} function or functions, \code{model = TRUE} and \code{x = TRUE} are required arguments. Because of this requirement
+the use of \code{tt()} is not allowed in our function. As well as that, strata
+by covariate interaction terms are not allowed. Currently, this function
+does not support penalized models, and it will not support multi-state
+models for the forseeable future. In addition a warning is in order, in
+that you should not use \code{\link[survival:finegray]{survival::finegray()}} when creating Cox models for
+this function, although doing so will not result in an error.
 }
 
 \section{Guidelines}{
