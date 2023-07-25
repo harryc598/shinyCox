@@ -77,7 +77,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   if(inherits(input.list[[1]], "coxph.penal")) {
     stop("shine_coxph does not currently support penalized Cox models")
   } else if(inherits(input.list[[1]], "coxms")) {
-    stop("shine_coxph does not currently support multi-state models")
+    stop("shine_coxph does not support multi-state models")
   } else
   n.list <- length(input.list)
   list.class <- rep("",n.list)
@@ -155,7 +155,9 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
             "    tabPanel('Plot',",
             "             sidebarLayout(",
             "             sidebarPanel(",
-            paste0("                          ", # SUBODH CHANGED FLOW
+            " # Inputs below; for any sliderInput with binary options, e.g. sex,",
+            " # add the argument 'step = 1'",
+            paste0("                          ",
                    input.data.code$ui.code,
                    ","),
             "textInput('predProbTimes','Times for predicted probabilities',placeholder='Enter values separated by a comma'),", # SUBODH ADDITION
