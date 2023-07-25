@@ -64,7 +64,7 @@ simplify_coxph <- function(coxph.result) {
   if (!is.null(bl.cox$strata)) {
     strt=rep(names(bl.cox$strata),bl.cox$strata)
     if(any(grepl("=", strt, fixed = TRUE))) {
-      eq.pos=regexpr("=",strt,fixed=TRUE)
+      eq.pos=regexpr("=", strt, fixed = TRUE)
       strt.vname=substring(strt[1],1,eq.pos[1]-1)
     } else {
       where.strata <- which(grepl("strata(", names(coxph.result$model), fixed = TRUE))
@@ -190,6 +190,7 @@ predict_one_coxfit=function(coxfit,          # result of prep.coxfit
   # if stratified model, then limit to the stratum of newdata
   if (!is.null(coxfit$strata)) {
     strt.col.name <- names(coxfit$bl.surv[, !names(coxfit$bl.surv) %in% c("time", "surv"), drop = FALSE])
+    newdata <- as.data.frame(newdata)
     strt.var <- newdata[, strt.col.name]
     # If strata is constructed strt=1, then "=" removed and LHS is strata name
     # If there is no "=" then strata name is matched by column values
@@ -197,10 +198,13 @@ predict_one_coxfit=function(coxfit,          # result of prep.coxfit
     eq.pos <- regexpr("=", strt.var, fixed=TRUE)
     strt.var <- substring(strt.var, 1, eq.pos-1)
     strt.mtch <- (newdata[, strt.var] == res[, strt.var])
-    } else if(is.character(strt.var)) {
-    strt.column <- which(grepl(strt.var, newdata, fixed = TRUE))
-    strt.mtch <- (newdata[, strt.column]==res[, 1])
-    } else {
+    }
+    # else if(is.character(strt.var)) {
+    # #strt.column <- which(grepl(strt.var, newdata, fixed = TRUE))
+    # strt.column <- grepl(paste0("\\<", strt.var, "\\>"), newdata)
+    # strt.mtch <- (newdata[, strt.column]==res[, 1])
+    # }
+    else {
       strt.mtch <- (newdata[, strt.col.name] == res[, 1])
     }
     if (!any(strt.mtch)) {
