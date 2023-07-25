@@ -175,9 +175,8 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
             "textOutput(outputId='noPredTimes'),", # SUBODH ADDITION
             "tableOutput(outputId = 'cox.times')))),",# SUBODH ADDITION
             "tabPanel('Summary Tables',",
-            "mainPanel(",
             table.code$ui.code, ### NEW
-            ")))") # SUBODH CHANGED THE FLOW
+            "))") # SUBODH CHANGED THE FLOW
   } else if (theme == "dashboard") {
     ui.code <- c("library(shinydashboard)",
                      "ui = dashboardPage(",
