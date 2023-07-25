@@ -156,7 +156,11 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
             "             sidebarLayout(",
             "             sidebarPanel(",
             " # Inputs below; for any sliderInput with binary options, e.g. sex,",
+<<<<<<< HEAD
             " # add the argument 'step = 1'",
+=======
+            " # add the argument 'step = 1",
+>>>>>>> c92285f2045d1b55c11a53885729f0e4b572decd
             paste0("                          ",
                    input.data.code$ui.code,
                    ","),
