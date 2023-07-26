@@ -16,7 +16,7 @@ write_KM_plot_code=function(cox.fit.list)
   initialize.KM.hat=c("n.models=length(cox.fit.list)",
                       "KM.hat=vector('list',n.models)",
                       "lp=rep(NA,n.models)",
-                      "names(KM.hat)=names(cox.fit.list)") # here
+                      "names(KM.hat)=names(cox.fit.list)")
   server.code=c(server.code,
                 initialize.KM.hat)
 
@@ -115,9 +115,7 @@ write_KM_plot_code=function(cox.fit.list)
 #' @importFrom grDevices rainbow
 #' @importFrom graphics lines
 #' @importFrom graphics legend
-cox_KM_plots=function(KM.hat,clrs=NULL)
-
-{
+cox_KM_plots=function(KM.hat,clrs=NULL) {
   n.models=length(KM.hat)
   if (is.null(clrs)) {
     clrs=rainbow(n.models)
@@ -141,10 +139,6 @@ cox_KM_plots=function(KM.hat,clrs=NULL)
     lines(KM.hat[[i]],col=clrs[i], lwd = 2)
   }
 
-  # legend(1.05*max.time,1,
-  #        col=clrs,lwd=1,
-  #        legend=names(KM.hat),
-  #        cex=1)
   legend("topright", col = clrs, lwd = 1, legend = names(KM.hat), cex = 1)
 }
 
@@ -303,7 +297,7 @@ write_coxfit_input_data_code <- function(cox.fit.list) {
                        logic.pick$server.code)
     }
   }
-  ##########################################################################
+
 
   if(!is.null(num.x.rng.mtx)) {
     for (i in 1:ncol(num.x.rng.mtx)) {
@@ -349,11 +343,10 @@ get_vnames_cox_fits <- function(cox.fit.list) {
   dup.name=duplicated(var.name)
   var.name=var.name[!dup.name]
   var.type=var.type[!dup.name]
-  # NEW
-  #############################
+
   var.name=na.omit(var.name)
   var.type=na.omit(var.type)
-  ###############################
+
   res=cbind.data.frame(var.name=var.name,
                        var.type=var.type)
 
@@ -365,7 +358,6 @@ get_vnames_cox_fits <- function(cox.fit.list) {
 #' @returns levels for categorical variables
 #' @noRd
 get_levels_cox_fits <- function(cox.fit.list,vnames) {
-  # how to deal with logical
   cat.vars=which(vnames[, "var.type"]!="numeric" & vnames[, "var.type"]!="logical")
   if (length(cat.vars)==0)
     return(NULL)
@@ -391,8 +383,6 @@ get_levels_cox_fits <- function(cox.fit.list,vnames) {
     cat.lvls[[j]]=unique(cat.lvls[[j]])
   }
 
-  # cat.names=gsub("strata(","",cat.names,fixed=TRUE)
-  # cat.names=gsub(")","",cat.names,fixed=TRUE)
   cat.names <- gsub("strata\\((\\w*)\\)", "\\1", cat.names)
   names(cat.lvls)=cat.names
 
@@ -403,8 +393,6 @@ get_levels_cox_fits <- function(cox.fit.list,vnames) {
 ####################################
 # Get the range of the numeric variables
 # across a list of cox.fit objects
-# Error, rng.mtx[1,x.name]=min(x.rng[1,j],rng.mtx[1,x.name],na.rm=T)
-#        rng.mtx[2,x.name]=min(x.rng[2,j],rng.mtx[2,x.name],na.rm=T) fixed
 #' @returns range for each numeric variable, as matrix
 #' @noRd
 get_xrng_cox_fits=function(cox.fit.list,vnames)
@@ -436,8 +424,7 @@ get_xrng_cox_fits=function(cox.fit.list,vnames)
 }
 
 
-# add tab with plot hazard ratio table
-# NEW function
+
 ########################################
 #' @returns levels for any logic variables, `TRUE` and `FALSE`
 #' @noRd
@@ -460,7 +447,7 @@ get_logic_cox_fits <- function(cox.fit.list, vnames) {
   return(logic.levels)
 }
 
-# NEW function, proportional hazard for each
+
 ##################################################################
 #' @returns UI and server code for proportional hazards tables and hazard ratio
 #'  tables
