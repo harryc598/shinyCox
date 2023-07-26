@@ -98,7 +98,6 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
 
   ##########################
   # get app directory
-  #app.dir=input.list$app.dir
   if (is.null(app.dir)) {
     check <- utils::menu(c("Yes", "No, I'll provide a directory"),
                   title = "You have not specified an app directory. Would you like to use the working directory?")
@@ -160,11 +159,11 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
             paste0("                          ",
                    input.data.code$ui.code,
                    ","),
-            "textInput('predProbTimes','Times for predicted probabilities',placeholder='Enter values separated by a comma'),", # SUBODH ADDITION
+            "textInput('predProbTimes','Times for predicted probabilities',placeholder='Enter values separated by a comma'),",
             "actionButton(inputId = 'go', label = 'Generate Plot'),",
-            "actionButton(inputId = 'reset', label = 'Reset'),", # SUBODH ADDITION
+            "actionButton(inputId = 'reset', label = 'Reset'),",
             "actionButton(inputId = 'app.exit', label = 'Exit App'),",
-            "selectInput('clrs', label = 'Choose Colors', choices = palette.pals(), selected = 'Okabe-Ito'),", # color choice
+            "selectInput('clrs', label = 'Choose Colors', choices = palette.pals(), selected = 'Okabe-Ito'),",
             "hr(),",
             "numericInput('height', 'Plot Height', value = 400),",
             "numericInput('width', 'Plot Width', value = 800),",
@@ -173,12 +172,12 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
             "mainPanel(",
             "h3('Predicted Survival Curve'),",
             "plotOutput(outputId = 'KM'),",
-            "h3('Predicted Probability at Fixed Times'),", # SUBODH ADDITION
-            "textOutput(outputId='noPredTimes'),", # SUBODH ADDITION
-            "tableOutput(outputId = 'cox.times')))),",# SUBODH ADDITION
+            "h3('Predicted Probability at Fixed Times'),",
+            "textOutput(outputId='noPredTimes'),",
+            "tableOutput(outputId = 'cox.times')))),",
             "tabPanel('Summary Tables',",
-            table.code$ui.code, ### NEW
-            "))") # SUBODH CHANGED THE FLOW
+            table.code$ui.code,
+            "))")
   } else if (theme == "dashboard") {
     ui.code <- c("library(shinydashboard)",
                      "ui = dashboardPage(",
@@ -200,11 +199,11 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
                      paste0("                          ",
                             input.data.code$ui.code,
                             ","),
-                     "textInput('predProbTimes','Times for predicted probabilities',placeholder='Enter values separated by a comma'),", # SUBODH ADDITION
+                     "textInput('predProbTimes','Times for predicted probabilities',placeholder='Enter values separated by a comma'),",
                      "actionButton(inputId = 'go', label = 'Generate Plot'),",
-                     "actionButton(inputId = 'reset', label = 'Reset'),", # SUBODH ADDITION
+                     "actionButton(inputId = 'reset', label = 'Reset'),",
                      "actionButton(inputId = 'app.exit', label = 'Exit App'),",
-                     "selectInput('clrs', label = 'Choose Colors', choices = palette.pals(), selected = 'Okabe-Ito'),", # color choice
+                     "selectInput('clrs', label = 'Choose Colors', choices = palette.pals(), selected = 'Okabe-Ito'),",
                      "hr(),",
                      "numericInput('height', 'Plot Height', value = 400),",
                      "numericInput('width', 'Plot Width', value = 800),",
@@ -213,8 +212,8 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
                      "mainPanel(",
                      "h3('Predicted Survival Curve'),",
                      "plotOutput(outputId = 'KM'),",
-                     "h3('Predicted Probability at Fixed Times'),", # SUBODH ADDITION
-                     "textOutput(outputId='noPredTimes'),", # SUBODH ADDITION
+                     "h3('Predicted Probability at Fixed Times'),",
+                     "textOutput(outputId='noPredTimes'),",
                      "tableOutput(outputId = 'cox.times')))),",
                      table.code$uibottom,
                      "))))"
@@ -226,14 +225,14 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   server.code <- c("server = function(input,output)",
                 "{",
                 "          observeEvent(input$app.exit, {stopApp()}) # Exit when exit button is pressed",
-                table.code$server.code, ### NEW
+                table.code$server.code,
                 "          observeEvent(input$go, {",
                 input.data.code$server.code,
                 KM.plot.code$server.code,
-                "predProbTable <- cox_times_table(KM.hat,input$predProbTimes)", # SUBODH ADDITION
-                "if (is.null(predProbTable)) output$noPredTimes <- renderText('No input times detected. If you provided times, check that you separated numbers with a single comma and you provided valid numbers.') else output$noPredTimes <- renderText(invisible())", # SUBODH ADDITION
-                "output$cox.times <- renderTable(predProbTable, rownames = TRUE)", # SUBODH ADDITION
-                "colors <- palette.colors(length(cox.fit.list), input$clrs)", # colors
+                "predProbTable <- cox_times_table(KM.hat,input$predProbTimes)",
+                "if (is.null(predProbTable)) output$noPredTimes <- renderText('No input times detected. If you provided times, check that you separated numbers with a single comma and you provided valid numbers.') else output$noPredTimes <- renderText(invisible())",
+                "output$cox.times <- renderTable(predProbTable, rownames = TRUE)",
+                "colors <- palette.colors(length(cox.fit.list), input$clrs)",
                 "output$downloadPlot <- downloadHandler(",
                 "  filename = function() { paste0('plot.png') },",
                 "  content = function(file) {",
@@ -242,15 +241,15 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
                 "    dev.off()",
                 "  })",
                 "})",
-                "          observeEvent(input$reset, {output$KM <- output$HR <- output$PHA <- output$cox.times <- NULL}) # Reset main area", # SUBODH ADDITION
-                "}") # SUBODH CHANGED THE FLOW
+                "          observeEvent(input$reset, {output$KM <- output$HR <- output$PHA <- output$cox.times <- NULL}) # Reset main area",
+                "}")
 
-  ##########################
+  #--------------------------------------------
   # app code
   app.code <- c("cox.app = shinyApp(ui,server)")
-             #"runApp(cox.app)")
 
-  ###########################
+
+  #--------------------------------------------
   # write the app file
   app.code.file <- paste0(app.dir, "app.R")
   write(unlist(hdr.code), file = app.code.file, sep = "\n")
@@ -260,7 +259,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
 
 
 
-  ##########################
+  #--------------------------------------------
   # return result
 
   res=list(app.dir = app.dir,
