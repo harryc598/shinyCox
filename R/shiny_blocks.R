@@ -1,7 +1,4 @@
-########## SUBODH CHANGED ez.pickone
-
-#####################################################################
-# Generate ui and server code for to pick one choice from a dropdown
+# Generate ui and server code to pick one choice from a dropdown
 #' Generate code for `selectInput()`
 #'
 #' Creates a `selectInput()` function in shiny ui and pairs it with a server
@@ -22,19 +19,15 @@ ez_pickone=function(vname,    # Variable name
                  ", choices = ",
                  paste0(choices,
                         collapse=", "),
-                 ")") # SUBODH CHANGED FLOW AND REMOVED THE BELOW:
+                 ")")
 
-  # ", choices = c(",  # this adds an extra c()
-  # paste0(choices,
-  # paste0("'",choices,"'"), # this causes quotes around everything
-  #   collapse=", "),"))") # SUBODH CHANGED FLOW
   server.code=paste0("`",vname,"` = input$`",vname,"`")
   return(list(ui.code=ui.code,
               server.code=server.code))
 }
 
 
-#####################################################################
+#----------------------------------------------
 # Generate ui and server code for a slider bar (numeric data input)
 #' Generate code for `sliderInput()`
 #'
@@ -77,8 +70,6 @@ ez_slider=function(vname,  # variable name
 ez_pickone_logic=function(vname,    # Variable name
                           label,    # Variable label in the GUI
                           choices)  # possible values of the variable
-
-
 {
   ui.code=paste0("radioButtons(inputId = '",vname,
                  "', label = '",label,"'",
