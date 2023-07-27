@@ -144,14 +144,14 @@ simplify_coxph <- function(coxph.result) {
 
 #####################################################
 # Computes predicted survival outcomes for one patient based on a Cox model fit
-#' Compute predicted survival outcome
+#' Compute Cox-model predicted survival function
 #'
-#' Computes predicted survival outcome for one new data row using coxfit list
-#' object created by [prep_coxfit()].
+#' Computes Cox-model predicted survival function for one new data row using
+#' coxfit list object created by [prep_coxfit()].
 #' @param coxfit This is an object returned by [prep_coxfit()]
 #' @param newdata vector of new data
-#' @returns data.frame of predicted survival outcomes, one column is time, one
-#'  is probability
+#' @returns data.frame of predicted survival probabilities over time, one column
+#'  is time, one is probability
 #' @section Note:
 #'  This function's primary use is within the shiny app, where a `coxph` object
 #'  is not available. It can be used outside of that context but that is the
