@@ -4,3 +4,5 @@
 ^\.github$
 ^README\.Rmd$
 ^cran-comments\.md$
+^doc$
+^Meta$

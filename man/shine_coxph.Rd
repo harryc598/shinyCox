@@ -40,7 +40,7 @@ containing only information necessary for predictions.
 There are some requirements in order for this function to run without
 error: in your original \code{\link[survival:coxph]{survival::coxph()}} function or functions,
 \code{model = TRUE} and \code{x = TRUE} are required arguments (used to create the
-simplified coxph object). Currently, this function does not support
+simplified \code{"coxph"} object). Currently, this function does not support
 penalized models (e.g., as created by \code{ridge()} and \code{pspline()}). Multiple
 strata terms and strata by covariate interaction terms in the formula are
 also not currently supported, but workarounds are available by respectively

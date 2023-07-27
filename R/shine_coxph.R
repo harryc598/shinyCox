@@ -23,7 +23,7 @@
 #'   There are some requirements in order for this function to run without
 #'   error: in your original [survival::coxph()] function or functions,
 #'   `model = TRUE` and `x = TRUE` are required arguments (used to create the
-#'   simplified coxph object). Currently, this function does not support
+#'   simplified `"coxph"` object). Currently, this function does not support
 #'   penalized models (e.g., as created by `ridge()` and `pspline()`). Multiple
 #'   strata terms and strata by covariate interaction terms in the formula are
 #'   also not currently supported, but workarounds are available by respectively

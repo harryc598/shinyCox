@@ -17,7 +17,7 @@ is time, one is probability
 }
 \description{
 Computes Cox-model predicted survival function for one new data row using
-coxfit list object created by \code{\link[=prep_coxfit]{prep_coxfit()}}.
+\code{coxfit} list object created by \code{\link[=prep_coxfit]{prep_coxfit()}}.
 }
 \section{Note}{
 

@@ -147,7 +147,7 @@ simplify_coxph <- function(coxph.result) {
 #' Compute Cox-model predicted survival function
 #'
 #' Computes Cox-model predicted survival function for one new data row using
-#' coxfit list object created by [prep_coxfit()].
+#' `coxfit` list object created by [prep_coxfit()].
 #' @param coxfit This is an object returned by [prep_coxfit()]
 #' @param newdata vector of new data
 #' @returns data.frame of predicted survival probabilities over time, one column

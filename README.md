@@ -3,17 +3,30 @@
 
 # rshinycox
 
-The goal of rshinycox is to create a shiny app that displays a predicted
-survival curve or multiple curves. The motivation for this is multifold:
-for one, shiny apps are excellent tools for visualization, but are not
-always a straightforward process. This package allows the statistician
-to input their finished Cox models into the function `shine_coxph()` and
-it will create a shiny app for the user, with no other work required.
-The other motivation was to create an app that contained none of the
-original data used to create the Cox models. With this requirement,
-there is no worry of disclosing private data. So `shine_coxph()` will
-use the data for verification purposes, but discard it when the app is
-made, containing only the bare necessities to make predictions.
+The goal of rshinycox is to provide a tool for researchers to easily
+create shiny applications to display one or more Cox model-predicted
+survival curves. This work was motivated by clinical research to provide
+an interactive summary of fitted Cox models, make it easy for
+researchers to generate these summaries for their own research, and to
+support dissemination by minimizing the use of subject-identifiable
+data.
+
+Tables of hazard ratios remain an important summary of fitted Cox
+models, but predicted survival curves can provide a different summary
+that may be more interpretable to clinicians and patients.
+
+While shiny apps are excellent tools for visualization, development of
+these apps can be challenging for unfamiliar users. This package allows
+a user to input their final Cox model(s) into the function
+`shine_coxph()` to create a shiny app for the user with minimal
+additional work required.
+
+The function `shine_coxph()` initially uses the original data for
+internal verification purposes, but discards the original data when the
+app is made, containing only the bare necessities to make predictions
+(predictions are made in the application using the object returned by
+`prep_coxfit()`). When disseminating the final app, subject-identifiable
+data are not distributed.
 
 ## Installation
 

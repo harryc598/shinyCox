@@ -6,4 +6,4 @@
 
 ## Changes
 * Added wrapper function for coxph()
-* Added shinydashboard option
+* Added 'shinydashboard' option
