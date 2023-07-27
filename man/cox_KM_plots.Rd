@@ -2,22 +2,19 @@
 % Please edit documentation in R/shinybuilder.R
 \name{cox_KM_plots}
 \alias{cox_KM_plots}
-\title{Generate Cox predicted KM plots}
+\title{Generate Cox-model predicted Kaplan-Meier plots}
 \usage{
 cox_KM_plots(KM.hat, clrs = NULL)
 }
 \arguments{
 \item{KM.hat}{Time and survival probability created by \code{\link[=predict_one_coxfit]{predict_one_coxfit()}}}
 
-\item{clrs}{color of lines, consider for removal}
+\item{clrs}{color of lines}
 }
 \value{
-Plot of predicted survival curves
+Plot of predicted survival curve(s)
 }
 \description{
-Generate Cox predicted KM plots
-}
-\details{
 The main purpose of this function is to be used to create plots within the
 shiny app created by \code{\link[=shine_coxph]{shine_coxph()}}. For this reason the argument it takes,
 \code{KM.hat}, is created through a process delineated in the example. This can
@@ -27,14 +24,15 @@ app, although it is fully possible to do so.
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
-# First colon is split into three treatment arms
+# First colon is split into three treatment arms to compare predicted
+# survival across arms
 split_colon <- split(colon, colon$rx)
 
 colon_arm1 <- split_colon$Obs
 colon_arm2 <- split_colon$Lev
 colon_arm3 <- split_colon$`Lev+5FU`
 
-# Three coxph models are fit for each treatment
+# One coxph model is fit for each treatment
 
 colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes,
                   colon_arm1, x = TRUE, model = TRUE)

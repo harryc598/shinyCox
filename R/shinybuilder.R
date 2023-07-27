@@ -53,29 +53,32 @@ write_KM_plot_code=function(cox.fit.list)
 
 
 #############################
-#' Generate Cox predicted KM plots
+#' Generate Cox-model predicted Kaplan-Meier plots
 #'
 #' @param KM.hat Time and survival probability created by [predict_one_coxfit()]
-#' @param clrs color of lines, consider for removal
-#' @returns Plot of predicted survival curves
+#' @param clrs color of lines
+#' @returns Plot of predicted survival curve(s)
 #'
-#' @details
+#' @description
 #' The main purpose of this function is to be used to create plots within the
 #' shiny app created by [shine_coxph()]. For this reason the argument it takes,
 #' `KM.hat`, is created through a process delineated in the example. This can
 #' make the function more complicated if you want to use it outside of the shiny
 #' app, although it is fully possible to do so.
 #'
+#'
+#'
 #' @examplesIf interactive()
 #' library(survival)
-#' # First colon is split into three treatment arms
+#' # First colon is split into three treatment arms to compare predicted
+#' # survival across arms
 #' split_colon <- split(colon, colon$rx)
 #'
 #' colon_arm1 <- split_colon$Obs
 #' colon_arm2 <- split_colon$Lev
 #' colon_arm3 <- split_colon$`Lev+5FU`
 #'
-#' # Three coxph models are fit for each treatment
+#' # One coxph model is fit for each treatment
 #'
 #' colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes,
 #'                   colon_arm1, x = TRUE, model = TRUE)
@@ -148,7 +151,7 @@ predSurvTime <- function(kmIn,timeIn) { # expects a data frame with columns of t
   kmIn$surv[max(which(kmIn$time <= timeIn))]
 }
 
-#' Create table of Cox predicted probabilities
+#' Create table of Cox-model predicted probabilities
 #'
 #' @description
 #' Generates tables of predicted probabilities at specified time or vector of
@@ -159,26 +162,30 @@ predSurvTime <- function(kmIn,timeIn) { # expects a data frame with columns of t
 #' The main purpose of this function is to be used within the shiny app for the
 #' purpose of creating predicted probability tables for user-inputted times. For
 #' this reason it is not expressly recommended to use this function outside the
-#' context of the shiny app, but it is still possible to do so if desired.
+#' context of the shiny app, but it is still possible to do so if desired. The
+#' time or vector of times are inputted as characters due to the use of this
+#' function in the shiny app, where times are inputted as numbers separated by
+#' a comma,
 #'
 #'
 #' @param KM.hat List of `survfit` objects
-#' @param fixTimes time or vector of times for which predicted survival
-#'  probability is given.
+#' @param fixTimes character or vector of characters representing times for
+#'  which predicted survival probability is given
 #' @returns Table of predicted probabilities, one column for each time, and
-#'  one row for each curve.
+#'  one row for each curve
 #'
 #' @examplesIf interactive()
 #' library(survival)
 #' library(rshinycox)
-#' # First colon is split into three treatment arms
+#' # First colon is split into three treatment arms to compare predicted
+#' # survival across arms
 #' split_colon <- split(colon, colon$rx)
 #'
 #' colon_arm1 <- split_colon$Obs
 #' colon_arm2 <- split_colon$Lev
 #' colon_arm3 <- split_colon$`Lev+5FU`
 #'
-#' # Three coxph models are fit for each treatment
+#' # One coxph model is fit for each treatment
 #'
 #' colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes,
 #'                   colon_arm1, x = TRUE, model = TRUE)

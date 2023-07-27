@@ -2,19 +2,19 @@
 % Please edit documentation in R/shinybuilder.R
 \name{cox_times_table}
 \alias{cox_times_table}
-\title{Create table of Cox predicted probabilities}
+\title{Create table of Cox-model predicted probabilities}
 \usage{
 cox_times_table(KM.hat, fixTimes = NULL)
 }
 \arguments{
 \item{KM.hat}{List of \code{survfit} objects}
 
-\item{fixTimes}{time or vector of times for which predicted survival
-probability is given.}
+\item{fixTimes}{character or vector of characters representing times for
+which predicted survival probability is given}
 }
 \value{
 Table of predicted probabilities, one column for each time, and
-one row for each curve.
+one row for each curve
 }
 \description{
 Generates tables of predicted probabilities at specified time or vector of
@@ -25,20 +25,24 @@ probability information as a list of \code{survfit} objects.
 The main purpose of this function is to be used within the shiny app for the
 purpose of creating predicted probability tables for user-inputted times. For
 this reason it is not expressly recommended to use this function outside the
-context of the shiny app, but it is still possible to do so if desired.
+context of the shiny app, but it is still possible to do so if desired. The
+time or vector of times are inputted as characters due to the use of this
+function in the shiny app, where times are inputted as numbers separated by
+a comma,
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 library(rshinycox)
-# First colon is split into three treatment arms
+# First colon is split into three treatment arms to compare predicted
+# survival across arms
 split_colon <- split(colon, colon$rx)
 
 colon_arm1 <- split_colon$Obs
 colon_arm2 <- split_colon$Lev
 colon_arm3 <- split_colon$`Lev+5FU`
 
-# Three coxph models are fit for each treatment
+# One coxph model is fit for each treatment
 
 colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes,
                   colon_arm1, x = TRUE, model = TRUE)

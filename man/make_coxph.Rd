@@ -2,17 +2,14 @@
 % Please edit documentation in R/misc_functions.R
 \name{make_coxph}
 \alias{make_coxph}
-\title{Wrapper for \code{survival::coxph()}}
+\title{Wrapper to create \code{survival::coxph()} object suitable for \code{\link[=shine_coxph]{shine_coxph()}}}
 \usage{
 make_coxph(formula, data, ...)
 }
 \arguments{
-\item{formula}{
-    a formula object, with the response on the left of a \code{~} operator, and 
-    the terms on the right.  The response must be a survival object as 
-    returned by the \code{Surv} function.  For a multi-state model the
-    formula may be a list of formulas.
-  }
+\item{formula}{a formula object, with the response on the left of a \code{~}
+operator, and the terms on the right.  The response must be a survival
+object as returned by the \code{Surv} function.}
 
 \item{data}{
     a data.frame in which to interpret the variables named in 
@@ -21,11 +18,11 @@ make_coxph(formula, data, ...)
   }
 
 \item{...}{other arguments which will be passed to \code{coxph()}. Note that
-\code{x = TRUE} and \code{model = TRUE} are the default arguments, you do not need
-to include them here.}
+\code{x = TRUE} and \code{model = TRUE} are the default arguments (and required by
+\code{\link[=shine_coxph]{shine_coxph()}}), you do not need to include them here.}
 }
 \value{
-Object of class \code{"coxph"} representing the fit.
+Object of class \code{"coxph"} representing the fit
 }
 \description{
 Performs \code{\link[survival:coxph]{survival::coxph()}} with \code{model = TRUE} and \code{x = TRUE} as defaults.

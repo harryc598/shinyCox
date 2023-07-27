@@ -2,7 +2,7 @@
 % Please edit documentation in R/cox_predictions.R
 \name{predict_one_coxfit}
 \alias{predict_one_coxfit}
-\title{Compute predicted survival outcome}
+\title{Compute Cox-model predicted survival function}
 \usage{
 predict_one_coxfit(coxfit, newdata)
 }
@@ -12,12 +12,12 @@ predict_one_coxfit(coxfit, newdata)
 \item{newdata}{vector of new data}
 }
 \value{
-data.frame of predicted survival outcomes, one column is time, one
-is probability
+data.frame of predicted survival probabilities over time, one column
+is time, one is probability
 }
 \description{
-Computes predicted survival outcome for one new data row using coxfit list
-object created by \code{\link[=prep_coxfit]{prep_coxfit()}}.
+Computes Cox-model predicted survival function for one new data row using
+coxfit list object created by \code{\link[=prep_coxfit]{prep_coxfit()}}.
 }
 \section{Note}{
 

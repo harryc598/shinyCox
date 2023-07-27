@@ -2,20 +2,21 @@
 % Please edit documentation in R/shine_coxph.R
 \name{shine_coxph}
 \alias{shine_coxph}
-\title{Makes a shiny app for predictions from Cox model(s)}
+\title{Generates a shiny app for predictions from Cox model(s)}
 \usage{
 shine_coxph(..., app.dir = NULL, theme = c("default", "dashboard"))
 }
 \arguments{
-\item{...}{Any number of Cox proportional hazard models, created by
-\code{\link[survival:coxph]{survival::coxph()}} or this wrapper function, which is more strict in
-order to ensure the models are appropriate for \code{shine_coxph()}}
+\item{...}{Arbitrary number of Cox proportional hazard models, created by
+\code{\link[survival:coxph]{survival::coxph()}} or \code{\link[=make_coxph]{make_coxph()}}, which automatically ensures the
+models are appropriate for \code{shine_coxph()}}
 
-\item{app.dir}{Directory where shiny app is created. Specifically, a folder
-will be made containing the \code{app.R} file as well as the \code{.Rdata} file. If
-no directory is provided, the folder will be created in the working
-directory, with the user having the opportunity to confirm this or stop the
-function and provide a directory.}
+\item{app.dir}{Directory where shiny app is created. Specifically, a
+sub-folder will be made containing the \code{app.R} file as well as the \code{.Rdata}
+file within \code{app.dir}. If no directory is provided, execution will pause
+and the user will be asked to confirm whether this sub-folder may be
+created in the working directory or to stop the function and provide an
+input \code{app.dir}.}
 
 \item{theme}{Theme of shiny app.
 \itemize{
@@ -37,23 +38,31 @@ containing only information necessary for predictions.
 
 
 There are some requirements in order for this function to run without
-error: in your original \code{\link[survival:coxph]{survival::coxph()}} function or functions, \code{model = TRUE} and \code{x = TRUE} are required arguments. Because of this requirement
-the use of \code{tt()} is not allowed in our function. As well as that, strata
-by covariate interaction terms are not allowed. Currently, this function
-does not support penalized models, and it will not support multi-state
-models for the forseeable future. In addition a warning is in order, in
-that you should not use \code{\link[survival:finegray]{survival::finegray()}} when creating Cox models for
-this function, although doing so will not result in an error.
+error: in your original \code{\link[survival:coxph]{survival::coxph()}} function or functions,
+\code{model = TRUE} and \code{x = TRUE} are required arguments (used to create the
+simplified coxph object). Currently, this function does not support
+penalized models (e.g., as created by \code{ridge()} and \code{pspline()}). Multiple
+strata terms and strata by covariate interaction terms in the formula are
+also not currently supported, but workarounds are available by respectively
+using a new strata factor variable encompassing all combinations of desired
+stratum variable levels. Use of time-varying covariates (e.g. with \code{tt()})
+and multi-state models is not supported in our function. The package is not
+intended to support Fine-gray models by \code{\link[survival:finegray]{survival::finegray()}} creating Cox
+models, but doing so will not result in an error.
 }
 
 \section{Guidelines}{
 
 
-In regards to formula notation, the variable names used are ultimately what
-will be displayed in the application. Using functions in the formula will
-work, but with multiple nested functions it will fail. As well, using "."
-notation will not work at the moment. The \code{na.action} is inherited from the
-Cox models, with \code{omit} being the only option with support at this time.
+This package is intended to visualize and present predicted survival
+functions for fitted Cox models. In regards to formula notation, the
+variable names used are ultimately what will be displayed in the
+application. Using functions in the formula will work, but with multiple
+nested functions it will fail. Using "." notation is not currently
+supported. The \code{na.action} is inherited from the Cox models, with \code{omit}
+being the only option with support at this time. For these reasons, we
+recommend creating all final variables (including suitable transformations)
+with meaningful names prior to using \code{\link[survival:coxph]{survival::coxph()}}.
 }
 
 \examples{
