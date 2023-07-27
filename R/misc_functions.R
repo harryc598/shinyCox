@@ -72,16 +72,19 @@ make_DT_table <- function(cox.fit.list) {
   return(code.res)
 }
 
-#' Wrapper for `survival::coxph()`
+#' Wrapper to create `survival::coxph()` object suitable for [shine_coxph()]
 #'
 #' Performs [survival::coxph()] with `model = TRUE` and `x = TRUE` as defaults.
 #' Checks that Cox model is appropriate for use with [shine_coxph()].
 #'
+#' @param formula a formula object, with the response on the left of a `~`
+#'   operator, and the terms on the right.  The response must be a survival
+#'   object as returned by the `Surv` function.
 #' @inheritParams survival::coxph
 #' @param ... other arguments which will be passed to `coxph()`. Note that
-#'  `x = TRUE` and `model = TRUE` are the default arguments, you do not need
-#'  to include them here.
-#' @returns Object of class `"coxph"` representing the fit.
+#'  `x = TRUE` and `model = TRUE` are the default arguments (and required by
+#'  [shine_coxph()]), you do not need to include them here.
+#' @returns Object of class `"coxph"` representing the fit
 #'
 #' @examples
 #' library(survival)
