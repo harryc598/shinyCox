@@ -82,6 +82,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   ########################
   # determine the class of each input argument
   input.list <- list(...)
+  # ADd error for *strata()
   if(inherits(input.list[[1]], "coxph.penal")) {
     stop("shine_coxph does not currently support penalized Cox models")
   } else if(inherits(input.list[[1]], "coxms")) {
