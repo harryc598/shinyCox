@@ -101,7 +101,7 @@ simplify_coxph <- function(coxph.result) {
   ##############################################################
   coefs <- stats::coef(coxph.result)
   if(any(is.na(coefs))) {
-    stop("One or more of your coefficients is NA")
+    stop("One or more of your coefficients is NA. This can occur due to an inappropriate model, inadequate data, or an attempt to use strata by covariate interactions, which are not currently supported.")
   }
   pattern <- "\\("
   badnames <- which(grepl(pattern, names(coefs)))
