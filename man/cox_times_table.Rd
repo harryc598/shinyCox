@@ -28,7 +28,7 @@ this reason it is not expressly recommended to use this function outside the
 context of the shiny app, but it is still possible to do so if desired. The
 time or vector of times are inputted as characters due to the use of this
 function in the shiny app, where times are inputted as numbers separated by
-a comma,
+a comma
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
