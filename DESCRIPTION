@@ -1,4 +1,4 @@
-Package: rshinycox
+Package: shinyCox
 Title: Create Shiny Applications for Cox Proportional Hazards Models
 Version: 0.1.0
 Authors@R: c(
@@ -16,8 +16,8 @@ Description: Takes one or more fitted Cox proportional hazards models and writes
     The goal is towards visualization and presentation of predicted survival
     curves.
 License: MIT + file LICENSE
-URL: https://github.com/harryc598/rshinycox
-BugReports: https://github.com/harryc598/rshinycox/issues
+URL: https://github.com/harryc598/shinyCox
+BugReports: https://github.com/harryc598/shinyCox/issues
 Imports: 
     shiny,
     survival (>= 3.3)
