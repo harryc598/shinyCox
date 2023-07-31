@@ -165,7 +165,7 @@ predSurvTime <- function(kmIn,timeIn) { # expects a data frame with columns of t
 #' context of the shiny app, but it is still possible to do so if desired. The
 #' time or vector of times are inputted as characters due to the use of this
 #' function in the shiny app, where times are inputted as numbers separated by
-#' a comma,
+#' a comma
 #'
 #'
 #' @param KM.hat List of `survfit` objects
