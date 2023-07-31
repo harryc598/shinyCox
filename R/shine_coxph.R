@@ -82,7 +82,10 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   ########################
   # determine the class of each input argument
   input.list <- list(...)
-  # ADd error for *strata()
+  # strata by covariate error
+  if(any(grepl(":strata", names(input.list[[1]]$coefficients), fixed = TRUE))) {
+    stop("Your model containes strata by covariate interaction, which is not currently supported")
+  }
   if(inherits(input.list[[1]], "coxph.penal")) {
     stop("shine_coxph does not currently support penalized Cox models")
   } else if(inherits(input.list[[1]], "coxms")) {
@@ -246,7 +249,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
                 "  filename = function() { paste0('plot.png') },",
                 "  content = function(file) {",
                 "    png(file, input$width, input$height)",
-                "    rshinycox::cox_KM_plots(KM.hat, clrs = colors)",
+                "    shinyCox::cox_KM_plots(KM.hat, clrs = colors)",
                 "    dev.off()",
                 "  })",
                 "})",
