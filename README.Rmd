@@ -13,11 +13,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-# rshinycox
+# shinyCox
 
 
 
-The goal of rshinycox is to provide a tool for researchers to easily create shiny applications to display  one or more Cox model-predicted survival curves. This work was motivated by clinical research to provide an interactive summary of fitted Cox models, make it easy for researchers to generate these summaries for their own research, and to support dissemination by minimizing the use of subject-identifiable data.  
+The goal of shinyCox is to provide a tool for researchers to easily create shiny applications to display  one or more Cox model-predicted survival curves. This work was motivated by clinical research to provide an interactive summary of fitted Cox models, make it easy for researchers to generate these summaries for their own research, and to support dissemination by minimizing the use of subject-identifiable data.  
 
 Tables of hazard ratios remain an important summary of fitted Cox models, but predicted survival curves can provide a different summary that may be more interpretable to clinicians and patients. 
 
@@ -28,14 +28,14 @@ The function `shine_coxph()` initially uses the original data for internal verif
 ## Installation
 You can install this package using:
 ```r
-install.packages("rshinycox")
+install.packages("shinyCox")
 ```
 
-You can install the development version of rshinycox from [GitHub](https://github.com/) with:
+You can install the development version of shinyCox from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("harryc598/rshinycox")
+devtools::install_github("harryc598/shinyCox")
 ```
 
 ## Example
@@ -43,7 +43,7 @@ devtools::install_github("harryc598/rshinycox")
 Here is an example using multiple treatment arms, which will highlight the usefulness of this package. If you move around the inputs, you can see how for different combinations, one treatment might prevail over the other.
 
 ```{r example}
-library(rshinycox)
+library(shinyCox)
 library(survival)
 split_colon <- split(colon, colon$rx)
 

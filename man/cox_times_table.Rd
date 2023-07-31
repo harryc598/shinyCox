@@ -33,7 +33,7 @@ a comma,
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
-library(rshinycox)
+library(shinyCox)
 # First colon is split into three treatment arms to compare predicted
 # survival across arms
 split_colon <- split(colon, colon$rx)

@@ -25,7 +25,7 @@ write_KM_plot_code=function(cox.fit.list)
 
   compute.KM.hat=c("for (i in 1:n.models)",
                    "{",
-                   "   km.hat=rshinycox::predict_one_coxfit(cox.fit.list[[i]],new.data)",
+                   "   km.hat=shinyCox::predict_one_coxfit(cox.fit.list[[i]],new.data)",
                    "   lp[i]=attr(km.hat,'lp')",
                    "   sfit=list(time=km.hat$time,surv=km.hat$surv)",
                    "   class(sfit)='survfit'",
@@ -37,7 +37,7 @@ write_KM_plot_code=function(cox.fit.list)
   #########
   # server and ui code to display KM plots
 
-  display.KM.server=c("output$KM=renderPlot({rshinycox::cox_KM_plots(KM.hat,clrs=colors)})")
+  display.KM.server=c("output$KM=renderPlot({shinyCox::cox_KM_plots(KM.hat,clrs=colors)})")
   display.KM.ui=c("plotOutput(outputId = 'KM')")
 
   ui.code=c(ui.code,
@@ -176,7 +176,7 @@ predSurvTime <- function(kmIn,timeIn) { # expects a data frame with columns of t
 #'
 #' @examplesIf interactive()
 #' library(survival)
-#' library(rshinycox)
+#' library(shinyCox)
 #' # First colon is split into three treatment arms to compare predicted
 #' # survival across arms
 #' split_colon <- split(colon, colon$rx)

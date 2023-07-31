@@ -1,9 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rshinycox
+# shinyCox
 
-The goal of rshinycox is to provide a tool for researchers to easily
+The goal of shinyCox is to provide a tool for researchers to easily
 create shiny applications to display one or more Cox model-predicted
 survival curves. This work was motivated by clinical research to provide
 an interactive summary of fitted Cox models, make it easy for
@@ -33,15 +33,15 @@ data are not distributed.
 You can install this package using:
 
 ``` r
-install.packages("rshinycox")
+install.packages("shinyCox")
 ```
 
-You can install the development version of rshinycox from
+You can install the development version of shinyCox from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("harryc598/rshinycox")
+devtools::install_github("harryc598/shinyCox")
 ```
 
 ## Example
@@ -52,7 +52,7 @@ see how for different combinations, one treatment might prevail over the
 other.
 
 ``` r
-library(rshinycox)
+library(shinyCox)
 library(survival)
 split_colon <- split(colon, colon$rx)
 
