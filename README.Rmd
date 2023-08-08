@@ -45,20 +45,25 @@ Here is an example using multiple treatment arms, which will highlight the usefu
 ```{r example}
 library(shinyCox)
 library(survival)
-split_colon <- split(colon, colon$rx)
+# colon data has two event types, etype 2 is death 
+colondeaths <- colon[colon$etype == 2, ]
+split_colon <- split(colondeaths, colondeaths$rx)
 
 colon_arm1 <- split_colon$Obs
 colon_arm2 <- split_colon$Lev
 colon_arm3 <- split_colon$`Lev+5FU`
 
-colon1ph <- coxph(Surv(time, status) ~sex +  age + obstruct + nodes, colon_arm1,
+colon1ph <- coxph(Surv(time, status) ~ factor(extent) + factor(obstruct) + nodes                   + factor(differ), 
+                  colon_arm1,
                   x = TRUE, model = TRUE)
-colon2ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm2,
+colon2ph <- coxph(Surv(time, status) ~ factor(extent) + factor(obstruct) + nodes                   + factor(differ), 
+                  colon_arm2,
                   x = TRUE, model = TRUE)
-colon3ph <- coxph(Surv(time, status) ~ sex + age + obstruct + nodes, colon_arm3,
+colon3ph <- coxph(Surv(time, status) ~ factor(extent) + factor(obstruct) + nodes                   + factor(differ), 
+                  colon_arm3,
                   x = TRUE, model = TRUE)
 # This will write a shiny app into whatever your working directory is
-# shine_coxph("arm1" = colon1ph, "arm2" = colon2ph, "arm3" = colon3ph, theme = "dashboard", app.dir = getwd())
+# shine_coxph("Obs" = colon1ph, "Lev" = colon2ph, "Lev+5FU" = colon3ph, theme = "dashboard", app.dir = getwd())
 
 ```
 
