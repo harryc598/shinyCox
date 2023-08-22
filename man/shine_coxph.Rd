@@ -69,8 +69,7 @@ with meaningful names prior to using \code{\link[survival:coxph]{survival::coxph
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
   library(survival)
-  # Get temporary directory for shiny app
-  temp_app_dir <- tempdir()
+
   # Data used is from survival package, renamed for legibility
   names(leukemia)[names(leukemia) == "x"] <- "treatment"
   # Make Cox model, with x = TRUE and model = TRUE
@@ -78,16 +77,15 @@ with meaningful names prior to using \code{\link[survival:coxph]{survival::coxph
   leukemia, x = TRUE, model = TRUE)
 
   # Use shine_coxph() to create shiny app in temporary directory
-  shine_coxph("Model 1" = model1, app.dir =
-  temp_app_dir)
+  shine_coxph("Model 1" = model1)
 
   # Get directory for shiny app (should be first, check file list if not)
-  filedir <- list.files(temp_app_dir)[1]
+  filedir <- list.files(tempdir())[1]
 
   # Run shiny app from temporary directory
-  shiny::runApp(paste0(temp_app_dir, "/", filedir))
+  shiny::runApp(paste0(tempdir(), "/", filedir))
   # Remove app from directory once finished
-  unlink(paste0(temp_app_dir,"/",filedir), recursive = TRUE)
+  unlink(paste0(tempdir(),"/",filedir), recursive = TRUE)
 
 \dontshow{\}) # examplesIf}
 }

@@ -1,5 +1,5 @@
 Package: shinyCox
-Title: Create Shiny Applications for Cox Proportional Hazards Models
+Title: Create 'shiny' Applications for Cox Proportional Hazards Models
 Version: 1.0.0
 Authors@R: c(
     person("Harrison", "Clement", 
