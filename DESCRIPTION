@@ -1,6 +1,6 @@
 Package: shinyCox
 Title: Create 'shiny' Applications for Cox Proportional Hazards Models
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Harrison", "Clement", 
     email = "harrisonclement16@gmail.com", role = c("aut", "cre")),
