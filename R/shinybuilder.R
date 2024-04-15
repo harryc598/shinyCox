@@ -26,8 +26,11 @@ write_KM_plot_code=function(cox.fit.list)
   compute.KM.hat=c("for (i in 1:n.models)",
                    "{",
                    "   km.hat=shinyCox::predict_one_coxfit(cox.fit.list[[i]],new.data)",
+                   "   sfit2 = part2(part1.out[[i]], cox.fit.list[[i]], new.data)[[1]]",
+                   "   km_ci = get_confint(sfit2$surv, sfit2$std.err, conf.type = 'log-log', conf.int = 0.95)",
                    "   lp[i]=attr(km.hat,'lp')",
-                   "   sfit=list(time=km.hat$time,surv=km.hat$surv)",
+                   "   sfit=list(time=km.hat$time,surv=km.hat$surv, std.err = sfit2$std.err,
+                       lower = km_ci$lower, upper = km_ci$upper)",
                    "   class(sfit)='survfit'",
                    "   KM.hat[[i]]=sfit",
                    "}")
@@ -37,7 +40,7 @@ write_KM_plot_code=function(cox.fit.list)
   #########
   # server and ui code to display KM plots
 
-  display.KM.server=c("output$KM=renderPlot({shinyCox::cox_KM_plots(KM.hat,clrs=colors)})")
+  display.KM.server=c("output$KM=renderPlot({shinyCox::cox_KM_plots(KM.hat,clrs=colors, confint=input$confint, ylab=input$ylab)})")
   display.KM.ui=c("plotOutput(outputId = 'KM')")
 
   ui.code=c(ui.code,
@@ -57,6 +60,9 @@ write_KM_plot_code=function(cox.fit.list)
 #'
 #' @param KM.hat Time and survival probability created by [predict_one_coxfit()]
 #' @param clrs color of lines
+#' @param confint logical value to determinie if confidence intervals should be
+#' plotted
+#' @param ylab text label for y-axis
 #' @returns Plot of predicted survival curve(s)
 #'
 #' @description
@@ -118,7 +124,8 @@ write_KM_plot_code=function(cox.fit.list)
 #' @importFrom grDevices rainbow
 #' @importFrom graphics lines
 #' @importFrom graphics legend
-cox_KM_plots=function(KM.hat,clrs=NULL) {
+cox_KM_plots=function(KM.hat, clrs=NULL, confint, ylab = "Prob") {
+
   n.models=length(KM.hat)
   if (is.null(clrs)) {
     clrs=rainbow(n.models)
@@ -134,17 +141,20 @@ cox_KM_plots=function(KM.hat,clrs=NULL) {
                  max(KM.hat[[i]]$time,na.rm=TRUE))
   }
 
-  plot(c(0,1.2*max.time),
+  plot(c(0,1.1*max.time),
        c(0,1),xlab="Time",las=1,
-       ylab="Prob",type="n")
+       ylab=ylab,type="n")
+
 
   for (i in 1:n.models) {
-    lines(KM.hat[[i]],col=clrs[i], lwd = 2)
+    lines(KM.hat[[i]],col=clrs[i], lwd = 2, conf.int = confint)
   }
 
   legend("topright", col = clrs, lwd = 1, legend = names(KM.hat), cex = 1)
-}
 
+
+
+}
 #############################
 # Generate Cox predicted times table: SUBODH NEW ADDITION
 predSurvTime <- function(kmIn,timeIn) { # expects a data frame with columns of time and surv

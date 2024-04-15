@@ -127,15 +127,17 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   #######################
   # convert the coxph models to coxfit objects
   coxfit.list <- vector("list",n.model)
+  part1.out = vector("list", n.model)
   for (i in 1:n.model) {
     coxfit.list[[i]] <- prep_coxfit(model.list[[i]])
+    part1.out[[i]] = surv_pred_info(model.list[[i]])
   }
   names(coxfit.list) <- names(model.list)
 
   #######################
   # Save app data into app directory
   cox.fit.list <- coxfit.list
-  save(cox.fit.list, file = paste0(app.dir, "appData.Rdata"))
+  save(cox.fit.list = cox.fit.list, part1.out = part1.out, file = paste0(app.dir, "appData.Rdata"))
 
   #######################
   # get different code sections
@@ -152,6 +154,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   # generate header code
   hdr.code <- c("#rm(list=ls())",
              "options(stringsAsFactors=FALSE)",
+             "library(shinyCox)",
              paste0("load('", gsub("\\\\", "/", app.dir), "appData.Rdata')"))
 
 
@@ -170,6 +173,8 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
                    input.data.code$ui.code,
                    ","),
             "textInput('predProbTimes','Times for predicted probabilities',placeholder='Enter values separated by a comma'),",
+            "checkboxInput('confint', 'Confidence Intervals', value = FALSE),",
+            "textInput('ylab', 'Y-axis Text'),",
             "actionButton(inputId = 'go', label = 'Generate Plot'),",
             "actionButton(inputId = 'reset', label = 'Reset'),",
             "actionButton(inputId = 'app.exit', label = 'Exit App'),",
@@ -210,6 +215,8 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
                             input.data.code$ui.code,
                             ","),
                      "textInput('predProbTimes','Times for predicted probabilities',placeholder='Enter values separated by a comma'),",
+                     "checkboxInput('confint', 'Confidence Intervals', value = FALSE),",
+                     "textInput('ylab', 'Y-axis Text'),",
                      "actionButton(inputId = 'go', label = 'Generate Plot'),",
                      "actionButton(inputId = 'reset', label = 'Reset'),",
                      "actionButton(inputId = 'app.exit', label = 'Exit App'),",

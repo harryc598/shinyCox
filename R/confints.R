@@ -1,3 +1,7 @@
+#' Gets the bits for part2
+#' @import stats
+#' @import survival
+#' @noRd
 surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, stype = 2) {
   object <- model
 
@@ -139,8 +143,8 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
 }
 
 #' Creates predicted survival and standard errors for confidence intervals
-#' @importFrom stats delete.response model.extract model.offset model.response
-#' @importFrom stats model.weights terms
+#' @import survival
+#' @import stats
 part2 = function(listsurv, coxfit, newdata, id2) {
   object <- list()
   survlist <- listsurv[[1]]
