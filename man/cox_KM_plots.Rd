@@ -4,12 +4,17 @@
 \alias{cox_KM_plots}
 \title{Generate Cox-model predicted Kaplan-Meier plots}
 \usage{
-cox_KM_plots(KM.hat, clrs = NULL)
+cox_KM_plots(KM.hat, clrs = NULL, confint, ylab = "Prob")
 }
 \arguments{
 \item{KM.hat}{Time and survival probability created by \code{\link[=predict_one_coxfit]{predict_one_coxfit()}}}
 
 \item{clrs}{color of lines}
+
+\item{confint}{logical value to determinie if confidence intervals should be
+plotted}
+
+\item{ylab}{text label for y-axis}
 }
 \value{
 Plot of predicted survival curve(s)

@@ -84,7 +84,7 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
       if (is.null(weights)) offset.mean <- mean(offset)
       else offset.mean <- sum(offset * (weights/sum(weights)))
     }
-    X <- survival:::model.matrix.coxph(object, data=mf)
+    X <- model.matrix.coxph(object, data=mf)
     if (is.null(Y) || coxms) {
       Y <- model.response(mf)
       if (is.null(object$timefix) || object$timefix) Y <- aeqSurv(Y)
@@ -129,7 +129,7 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
   if (is.null(strata)) strata <- rep(1L, nrow(Y))
   for (i in 1:nstrata) {
     indx <- which(strata== ustrata[i])
-    survlist[[i]] <- survival:::agsurv(Y[indx,,drop=F], X[indx,,drop=F],
+    survlist[[i]] <- agsurv(Y[indx,,drop=F], X[indx,,drop=F],
                                        wt[indx], risk[indx],
                                        survtype, vartype)
   }
@@ -143,9 +143,13 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
 }
 
 #' Creates predicted survival and standard errors for confidence intervals
+#'
+#' @param listsurv Output from 'surv_pred_info' function
+#' @param coxfit coxfit object created for predictions. Used to find strata
+#' @param newdata Data used to make predicted standard errors
 #' @import survival
 #' @import stats
-part2 = function(listsurv, coxfit, newdata, id2) {
+part2 = function(listsurv, coxfit, newdata) {
   object <- list()
   survlist <- listsurv[[1]]
   Terms <- listsurv[[2]]
@@ -296,7 +300,7 @@ part2 = function(listsurv, coxfit, newdata, id2) {
                   strata = sapply(result, function(x) length(x$time)))
       names(temp$strata) <- names(result)
 
-      if ((missing(id2) || is.null(id2)) && nrow(x2)>1) {
+     # if ((missing(id2) || is.null(id2)) && nrow(x2)>1) {
         temp$surv <- t(matrix(unlist(lapply(result,
                                             function(x) t(x$surv)), use.names=FALSE),
                               nrow= nrow(x2)))
@@ -308,16 +312,16 @@ part2 = function(listsurv, coxfit, newdata, id2) {
           temp$std.err <- t(matrix(unlist(lapply(result,
                                                  function(x) t(x$std.err)), use.names=FALSE),
                                    nrow= nrow(x2)))
-      }
-      else {
-        temp$surv <- unlist(lapply(result, function(x) x$surv),
-                            use.names=FALSE)
-        temp$cumhaz <- unlist(lapply(result, function(x) x$cumhaz),
-                              use.names=FALSE)
-        if (se.fit)
-          temp$std.err <- unlist(lapply(result,
-                                        function(x) x$std.err), use.names=FALSE)
-      }
+      # }
+      # else {
+      #   temp$surv <- unlist(lapply(result, function(x) x$surv),
+      #                       use.names=FALSE)
+      #   temp$cumhaz <- unlist(lapply(result, function(x) x$cumhaz),
+      #                         use.names=FALSE)
+      #   if (se.fit)
+      #     temp$std.err <- unlist(lapply(result,
+      #                                   function(x) x$std.err), use.names=FALSE)
+      # }
       return(list(temp,
                   #strata2,
                   mf2, has.strata, found.strata, se.fit))
@@ -332,6 +336,9 @@ part2 = function(listsurv, coxfit, newdata, id2) {
 }
 
 
-
-
+#' Creates confidence levels for plotting predicted survival curves.
+#' @references survival authort
 get_confint <- utils::getFromNamespace("survfit_confint", "survival")
+
+
+agsurv <- utils::getFromNamespace("agsurv", "survival")
