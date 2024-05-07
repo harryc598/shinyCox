@@ -1,7 +1,38 @@
-#' Gets the bits for part2
+#' Obtains information for standard errors of predictions
+#'
+#' Computes necessary information to calculate standard errors and confidence
+#' intervals in shiny app. This is adapted from parts of 'survfit.coxph'. This
+#' function is meant to be used in conjuction with 'predict_se'.
+#'
+#' @param model a 'coxph' object
+#' @param ctype whether the cumulative hazard computation should have a
+#'              correction for ties, 1=no, 2=yes.
+#' @param individual deprecated argument, replaced by 'id'
+#' @param id optional variable name of subject identifiers. Not supported in app
+#' @param se.fit a logical value indicating whether standard errors should be
+#'              computed. Default is TRUE for standard models, FALSE for
+#'              multi-state (code not yet present for that case.)
+#' @param stype computation of the survival curve, 1=direct, 2= exponenial of
+#'              the cumulative hazard. Default is 2.
+#' @returns A list of information needed for computing predicted standard
+#'          errors.
+#' @examples
+#' library(survival)
+#' library(shinyCox)
+#'
+#' colondeaths <- colon[colon$etype == 2, ]
+#' split_colon <- split(colondeaths, colondeaths$rx)
+#' colon_arm1 <- split_colon$Obs
+#'
+#' colon1ph <- coxph(Surv(time, status) ~ factor(extent) + nodes + strata(surg)
+#'                    + factor(differ),
+#'                    colon_arm1,
+#'                    x = TRUE, model = TRUE)
+#' coxlist = surv_pred_info(colon1ph)
+#'
 #' @import stats
 #' @import survival
-#' @noRd
+#' @export
 surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, stype = 2) {
   object <- model
 
@@ -137,19 +168,30 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
   stuff_for_later <- list(survlist = survlist, Terms = Terms, has.strata = has.strata,
                          stangle = stangle, xlevels = object$xlevels, means = object$means,
                          beta = beta, xcenter = xcenter, se.fit = se.fit, varmat = varmat,
-                         strata = strata, survtype = survtype)
+                         #strata = strata,
+                         survtype = survtype)
 
-  return(stuff_for_later) # need surv as well, can get from earlier stuff.
+  return(stuff_for_later)
 }
 
 #' Creates predicted survival and standard errors for confidence intervals
 #'
+#' Adapted from parts of 'survfit.coxph', computes predictions for standard
+#' errors based on 'surv_pred_info' output and 'newdata' from the shiny app.
 #' @param listsurv Output from 'surv_pred_info' function
 #' @param coxfit coxfit object created for predictions. Used to find strata
 #' @param newdata Data used to make predicted standard errors
+#'
+#' @returns a list of number of subjects for each curve, times at which the
+#'          curve has a step, number at
+#'          risk for each time, number of events at each time, number censored
+#'          at each time (no event but exit risk set), estimated survival,
+#'          cumulative hazard at each transition, and standard error of the
+#'          cumulative hazard.
 #' @import survival
 #' @import stats
-part2 = function(listsurv, coxfit, newdata) {
+#' @export
+predict_se = function(listsurv, coxfit, newdata) {
   object <- list()
   survlist <- listsurv[[1]]
   Terms <- listsurv[[2]]
@@ -161,15 +203,18 @@ part2 = function(listsurv, coxfit, newdata) {
   xcenter <- listsurv[[8]]
   se.fit <- listsurv[[9]]
   varmat <- listsurv[[10]]
-  strata <- listsurv[[11]]
-  survtype <- listsurv[[12]]
+  #strata <- listsurv[[11]]
+  survtype <- listsurv[[11]]
   found.strata <- FALSE
+  ustrata <- NULL
 
   strt.col.name <- names(coxfit$bl.surv[, !names(coxfit$bl.surv) %in% c("time", "surv"), drop = FALSE])
 
   strt.var <- newdata[, strt.col.name]
   #strata.new = paste0(strt.col.name, '=', strt.var)
+
   survlist <- list(survlist[[strt.var]])
+
   step_1 <- gsub("factor", "", names(newdata))
   step_2 <- gsub("\\(", "", step_1)
   step_3 <- gsub("\\)", "", step_2)
@@ -280,9 +325,7 @@ part2 = function(listsurv, coxfit, newdata) {
       if (se.fit) {
         result = result[[1]][c("n", "time", "n.risk", "n.event", "n.censor",
                                "surv", "cumhaz", "std.err")]
-        return(list(result,
-                    #strata2,
-                    mf2, has.strata, found.strata, se.fit))
+        return(result)
       } else {result[[1]][c("n", "time", "n.risk", "n.event", "n.censor",
                             "surv", "cumhaz")]}
     }
@@ -300,7 +343,7 @@ part2 = function(listsurv, coxfit, newdata) {
                   strata = sapply(result, function(x) length(x$time)))
       names(temp$strata) <- names(result)
 
-     # if ((missing(id2) || is.null(id2)) && nrow(x2)>1) {
+
         temp$surv <- t(matrix(unlist(lapply(result,
                                             function(x) t(x$surv)), use.names=FALSE),
                               nrow= nrow(x2)))
@@ -312,33 +355,186 @@ part2 = function(listsurv, coxfit, newdata) {
           temp$std.err <- t(matrix(unlist(lapply(result,
                                                  function(x) t(x$std.err)), use.names=FALSE),
                                    nrow= nrow(x2)))
-      # }
-      # else {
-      #   temp$surv <- unlist(lapply(result, function(x) x$surv),
-      #                       use.names=FALSE)
-      #   temp$cumhaz <- unlist(lapply(result, function(x) x$cumhaz),
-      #                         use.names=FALSE)
-      #   if (se.fit)
-      #     temp$std.err <- unlist(lapply(result,
-      #                                   function(x) x$std.err), use.names=FALSE)
-      # }
-      return(list(temp,
-                  #strata2,
-                  mf2, has.strata, found.strata, se.fit))
+
+      return(temp)
     }
   }
   else {
     names(result) <- ustrata
-    return(list(result,
-                #strata2,
-                mf2, has.strata, found.strata, se.fit))
+    return(result)
   }
 }
 
-
+#' Get confidence intervals for predicted survival curves
+#'
 #' Creates confidence levels for plotting predicted survival curves.
-#' @references survival authort
-get_confint <- utils::getFromNamespace("survfit_confint", "survival")
+#' @param p Vector of survival probabilities
+#' @param se Vector of standard errors
+#' @param conf.type Type of confidence interval, includes 'plain', 'log',
+#' 'log-log', 'logit', and 'arcsin'.
+#' @param conf.int The level for two-sided confidence interval on the predicted
+#' survival curve, default is 0.95.
+#' @param ulimit Should upper bound be limited to 1, default is TRUE
+#' @returns list of length two, containing the lower and upper confidence levels
+#'
+#' @examples
+#' library(survival)
+#' library(shinyCox)
+#' colondeaths <- colon[colon$etype == 2, ]
+#' split_colon <- split(colondeaths, colondeaths$rx)
+#'
+#' colon_arm1 <- split_colon$Obs
+#' colon1ph <- coxph(Surv(time, status) ~ factor(extent) + nodes + strata(surg)
+#'                   + factor(differ),
+#'                   colon_arm1,
+#'                   x = TRUE, model = TRUE)
+#'
+#' new.data = cbind.data.frame(`factor(extent)` = 3,
+#'                          `surg` = "surg=0",`factor(differ)` = 2,`nodes` = 5)
+#'
+#'
+#' coxfit = prep_coxfit(colon1ph)
+#' coxlist = surv_pred_info(colon1ph)
+#'
+#' for_ci = predict_se(coxlist, coxfit, new.data)
+#'
+#' get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
+#'             conf.type = "log-log")
+#'
+#' @export
+get_confint <- function(p, se, conf.type, conf.int, ulimit=TRUE) {
+  zval <- qnorm(1- (1-conf.int)/2, 0,1)
+  scale <- 1.0
 
+  if (conf.type=='plain') {
+    se2 <- se* p * zval  # matches equation 4.3.1 in Klein & Moeschberger
+    if (ulimit) list(lower= pmax(p -se2*scale, 0), upper = pmin(p + se2, 1))
+    else  list(lower= pmax(p -se2*scale, 0), upper = p + se2)
+  }
+  else if (conf.type=='log') {
+    #avoid some "log(0)" messages
+    xx <- ifelse(p==0, NA, p)
+    se2 <- zval* se
+    temp1 <- exp(log(xx) - se2*scale)
+    temp2 <- exp(log(xx) + se2)
+    if (ulimit) list(lower= temp1, upper= pmin(temp2, 1))
+    else  list(lower= temp1, upper= temp2)
+  }
+  else if (conf.type=='log-log') {
+    xx <- ifelse(p==0 | p==1, NA, p)
+    se2 <- zval * se/log(xx)
+    temp1 <- exp(-exp(log(-log(xx)) - se2*scale))
+    temp2 <- exp(-exp(log(-log(xx)) + se2))
+    list(lower = temp1 , upper = temp2)
+  }
+  else if (conf.type=='logit') {
+    xx <- ifelse(p==0, NA, p)  # avoid log(0) messages
+    se2 <- zval * se *(1 + xx/(1-xx))
+
+    temp1 <- 1- 1/(1+exp(log(p/(1-p)) - se2*scale))
+    temp2 <- 1- 1/(1+exp(log(p/(1-p)) + se2))
+    list(lower = temp1, upper=temp2)
+  }
+  else if (conf.type=="arcsin") {
+    xx <- ifelse(p==0, NA, p)
+    se2 <- .5 *zval*se * sqrt(xx/(1-xx))
+    list(lower= (sin(pmax(0, asin(sqrt(xx)) - se2*scale)))^2,
+         upper= (sin(pmin(pi/2, asin(sqrt(xx)) + se2)))^2)
+  }
+  else stop("invalid conf.int type")
+}
 
 agsurv <- utils::getFromNamespace("agsurv", "survival")
+
+#' For  use in internal surv_pred_info function, borrowed from survival package
+#'
+#' @param y Surv object
+#' @param id vector of ids coinciding with y.
+survflag <- function(y, id) {
+  if (!inherits(y, "Surv")) stop("y must be a Surv object")
+  if (nrow(y) != length(id)) stop("length mismatch")
+  if (ncol(y) != 3) stop("y needs to be of (tstart, tstop) form")
+
+  n <- nrow(y)
+  indx <- order(id, y[,2])  # sort the data by time within id
+  y2 <- y[indx,]
+  id2 <- id[indx]
+
+  newid <- (id2[-n] != id2[-1])
+  gap <-  (y2[-n,2] < y2[-1,1])
+
+  flag <- 1L*c(TRUE, newid | gap) + 2L*c(newid | gap, TRUE)
+  flag[indx] <- flag   # return it to data order
+  flag
+}
+
+
+
+#' Model.matrix method for coxph models
+#'
+#' Reconstruct the model matrix for a cox model
+#' @noRd
+model.matrix.coxph <- function(object, data=NULL,
+                               contrast.arg=object$contrasts, ...) {
+  #
+  # If the object has an "x" component, return it, unless a new
+  #   data set is given
+  if (is.null(data) && !is.null(object[['x']]))
+    return(object[['x']]) #don't match "xlevels"
+
+  Terms <- delete.response(object$terms)
+  if (is.null(data)) mf <- stats::model.frame(object)
+  else {
+    if (is.null(attr(data, "terms")))
+      mf <- stats::model.frame(Terms, data, xlev=object$xlevels)
+    else mf <- data  #assume "data" is already a model frame
+  }
+
+  cluster <- attr(Terms, "specials")$cluster
+  if (length(cluster)) {
+    temp <- untangle.specials(Terms, "cluster")
+    dropterms <- temp$terms
+  }
+  else dropterms <- NULL
+
+  strats <- attr(Terms, "specials")$strata
+  hasinteractions <- FALSE
+  if (length(strats)) {
+    stemp <- untangle.specials(Terms, 'strata', 1)
+    if (length(stemp$vars)==1) strata.keep <- mf[[stemp$vars]]
+    else strata.keep <- strata(mf[,stemp$vars], shortlabel=TRUE)
+    istrat <- as.integer(strata.keep)
+
+    for (i in stemp$vars) {  #multiple strata terms are allowed
+      # The factors attr has one row for each variable in the frame, one
+      #   col for each term in the model.  Pick rows for each strata
+      #   var, and find if it participates in any interactions.
+      if (any(attr(Terms, 'order')[attr(Terms, "factors")[i,] >0] >1))
+        hasinteractions <- TRUE
+    }
+    if (!hasinteractions) dropterms <- c(dropterms, stemp$terms)
+  } else istrat <- NULL
+
+
+  if (length(dropterms)) {
+    Terms2 <- Terms[-dropterms]
+    X <- model.matrix(Terms2, mf, constrasts.arg=contrast.arg)
+    # we want to number the terms wrt the original model matrix
+    temp <- attr(X, "assign")
+    shift <- sort(dropterms)
+    for (i in seq(along.with=shift))
+      temp <- temp + 1*(shift[i] <= temp)
+    attr(X, "assign") <- temp
+  }
+  else X <- model.matrix(Terms, mf, contrasts.arg=contrast.arg)
+
+  # drop the intercept after the fact, and also drop strata if necessary
+  Xatt <- attributes(X)
+  if (hasinteractions) adrop <- c(0, untangle.specials(Terms, "strata")$terms)
+  else adrop <- 0
+  xdrop <- Xatt$assign %in% adrop  #columns to drop (always the intercept)
+  X <- X[, !xdrop, drop=FALSE]
+  attr(X, "assign") <- Xatt$assign[!xdrop]
+  attr(X, "contrasts") <- Xatt$contrasts
+  X
+}

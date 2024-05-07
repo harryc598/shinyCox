@@ -26,7 +26,7 @@ write_KM_plot_code=function(cox.fit.list)
   compute.KM.hat=c("for (i in 1:n.models)",
                    "{",
                    "   km.hat=shinyCox::predict_one_coxfit(cox.fit.list[[i]],new.data)",
-                   "   sfit2 = part2(part1.out[[i]], cox.fit.list[[i]], new.data)[[1]]",
+                   "   sfit2 = predict_se(part1.out[[i]], cox.fit.list[[i]], new.data)",
                    "   km_ci = get_confint(sfit2$surv, sfit2$std.err, conf.type = 'log-log', conf.int = 0.95)",
                    "   lp[i]=attr(km.hat,'lp')",
                    "   sfit=list(time=km.hat$time,surv=km.hat$surv, std.err = sfit2$std.err,

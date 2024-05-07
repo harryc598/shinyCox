@@ -2,13 +2,51 @@
 % Please edit documentation in R/confints.R
 \name{get_confint}
 \alias{get_confint}
-\title{Creates confidence levels for plotting predicted survival curves.}
+\title{Get confidence intervals for predicted survival curves}
 \usage{
-get_confint(p, se, logse = TRUE, conf.type, conf.int, selow, ulimit = TRUE)
+get_confint(p, se, conf.type, conf.int, ulimit = TRUE)
+}
+\arguments{
+\item{p}{Vector of survival probabilities}
+
+\item{se}{Vector of standard errors}
+
+\item{conf.type}{Type of confidence interval, includes 'plain', 'log',
+'log-log', 'logit', and 'arcsin'.}
+
+\item{conf.int}{The level for two-sided confidence interval on the predicted
+survival curve, default is 0.95.}
+
+\item{ulimit}{Should upper bound be limited to 1, default is TRUE}
+}
+\value{
+list of length two, containing the lower and upper confidence levels
 }
 \description{
 Creates confidence levels for plotting predicted survival curves.
 }
-\references{
-survival authort
+\examples{
+library(survival)
+library(shinyCox)
+colondeaths <- colon[colon$etype == 2, ]
+split_colon <- split(colondeaths, colondeaths$rx)
+
+colon_arm1 <- split_colon$Obs
+colon1ph <- coxph(Surv(time, status) ~ factor(extent) + nodes + strata(surg)
+                  + factor(differ),
+                  colon_arm1,
+                  x = TRUE, model = TRUE)
+
+new.data = cbind.data.frame(`factor(extent)` = 3,
+                         `surg` = "surg=0",`factor(differ)` = 2,`nodes` = 5)
+
+
+coxfit = prep_coxfit(colon1ph)
+coxlist = surv_pred_info(colon1ph)
+
+for_ci = predict_se(coxlist, coxfit, new.data)
+
+get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
+            conf.type = "log-log")
+
 }

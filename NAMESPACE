@@ -2,10 +2,13 @@
 
 export(cox_KM_plots)
 export(cox_times_table)
+export(get_confint)
 export(make_coxph)
 export(predict_one_coxfit)
+export(predict_se)
 export(prep_coxfit)
 export(shine_coxph)
+export(surv_pred_info)
 import(stats)
 import(survival)
 importFrom(grDevices,hcl.colors)
