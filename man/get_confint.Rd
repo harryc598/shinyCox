@@ -26,6 +26,7 @@ list of length two, containing the lower and upper confidence levels
 Creates confidence levels for plotting predicted survival curves.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 library(shinyCox)
 colondeaths <- colon[colon$etype == 2, ]
@@ -46,7 +47,7 @@ coxlist = surv_pred_info(colon1ph)
 
 for_ci = predict_se(coxlist, coxfit, new.data)
 
-get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
+confints = get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
             conf.type = "log-log")
-
+\dontshow{\}) # examplesIf}
 }

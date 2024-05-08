@@ -1,24 +1,24 @@
 #' Obtains information for standard errors of predictions
 #'
-#' Computes necessary information to calculate standard errors and confidence
-#' intervals in shiny app. This is adapted from parts of 'survfit.coxph'. This
-#' function is meant to be used in conjuction with 'predict_se'.
+#' @description Computes necessary information to calculate standard errors and
+#'   confidence intervals in shiny app. This is adapted from parts of
+#'   'survfit.coxph'. This function is meant to be used in conjuction with
+#'   'predict_se'.
 #'
 #' @param model a 'coxph' object
 #' @param ctype whether the cumulative hazard computation should have a
-#'              correction for ties, 1=no, 2=yes.
+#'   correction for ties, 1=no, 2=yes.
 #' @param individual deprecated argument, replaced by 'id'
 #' @param id optional variable name of subject identifiers. Not supported in app
 #' @param se.fit a logical value indicating whether standard errors should be
-#'              computed. Default is TRUE for standard models, FALSE for
-#'              multi-state (code not yet present for that case.)
+#'   computed. Default is TRUE for standard models, FALSE for multi-state (code
+#'   not yet present for that case.)
 #' @param stype computation of the survival curve, 1=direct, 2= exponenial of
-#'              the cumulative hazard. Default is 2.
+#'   the cumulative hazard. Default is 2.
 #' @returns A list of information needed for computing predicted standard
-#'          errors.
-#' @examples
+#'   errors.
+#' @examplesIf interactive()
 #' library(survival)
-#' library(shinyCox)
 #'
 #' colondeaths <- colon[colon$etype == 2, ]
 #' split_colon <- split(colondeaths, colondeaths$rx)
@@ -168,7 +168,6 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
   stuff_for_later <- list(survlist = survlist, Terms = Terms, has.strata = has.strata,
                          stangle = stangle, xlevels = object$xlevels, means = object$means,
                          beta = beta, xcenter = xcenter, se.fit = se.fit, varmat = varmat,
-                         #strata = strata,
                          survtype = survtype)
 
   return(stuff_for_later)
@@ -176,18 +175,40 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
 
 #' Creates predicted survival and standard errors for confidence intervals
 #'
-#' Adapted from parts of 'survfit.coxph', computes predictions for standard
-#' errors based on 'surv_pred_info' output and 'newdata' from the shiny app.
+#' @description Adapted from parts of 'survfit.coxph', computes predictions for
+#'   standard errors based on 'surv_pred_info' output and 'newdata' from the
+#'   shiny app.
+#'
 #' @param listsurv Output from 'surv_pred_info' function
 #' @param coxfit coxfit object created for predictions. Used to find strata
 #' @param newdata Data used to make predicted standard errors
 #'
 #' @returns a list of number of subjects for each curve, times at which the
-#'          curve has a step, number at
-#'          risk for each time, number of events at each time, number censored
-#'          at each time (no event but exit risk set), estimated survival,
-#'          cumulative hazard at each transition, and standard error of the
-#'          cumulative hazard.
+#'   curve has a step, number at risk for each time, number of events at each
+#'   time, number censored at each time (no event but exit risk set), estimated
+#'   survival, cumulative hazard at each transition, and standard error of the
+#'   cumulative hazard.
+#'
+#' @examplesIf interactive()
+#'   library(survival)
+#'   library(shinyCox)
+#'   colondeaths <- colon[colon$etype == 2, ]
+#'   split_colon <- split(colondeaths, colondeaths$rx)
+#'
+#'   colon_arm1 <- split_colon$Obs
+#'   colon1ph <- coxph(Surv(time, status) ~
+#'   factor(extent) + nodes + strata(surg) + factor(differ), colon_arm1, x =
+#'   TRUE, model = TRUE)
+#'
+#'   new.data = cbind.data.frame(`factor(extent)` = 3, `surg` =
+#'   "surg=0",`factor(differ)` = 2,`nodes` = 5)
+#'
+#'
+#'   coxfit = prep_coxfit(colon1ph)
+#'   coxlist = surv_pred_info(colon1ph)
+#'
+#'   for_confint = predict_se(coxlist, coxfit, new.data)
+#'
 #' @import survival
 #' @import stats
 #' @export
@@ -368,6 +389,7 @@ predict_se = function(listsurv, coxfit, newdata) {
 #' Get confidence intervals for predicted survival curves
 #'
 #' Creates confidence levels for plotting predicted survival curves.
+#'
 #' @param p Vector of survival probabilities
 #' @param se Vector of standard errors
 #' @param conf.type Type of confidence interval, includes 'plain', 'log',
@@ -377,7 +399,7 @@ predict_se = function(listsurv, coxfit, newdata) {
 #' @param ulimit Should upper bound be limited to 1, default is TRUE
 #' @returns list of length two, containing the lower and upper confidence levels
 #'
-#' @examples
+#' @examplesIf interactive()
 #' library(survival)
 #' library(shinyCox)
 #' colondeaths <- colon[colon$etype == 2, ]
@@ -398,7 +420,7 @@ predict_se = function(listsurv, coxfit, newdata) {
 #'
 #' for_ci = predict_se(coxlist, coxfit, new.data)
 #'
-#' get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
+#' confints = get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
 #'             conf.type = "log-log")
 #'
 #' @export

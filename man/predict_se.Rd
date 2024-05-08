@@ -15,13 +15,35 @@ predict_se(listsurv, coxfit, newdata)
 }
 \value{
 a list of number of subjects for each curve, times at which the
-curve has a step, number at
-risk for each time, number of events at each time, number censored
-at each time (no event but exit risk set), estimated survival,
-cumulative hazard at each transition, and standard error of the
+curve has a step, number at risk for each time, number of events at each
+time, number censored at each time (no event but exit risk set), estimated
+survival, cumulative hazard at each transition, and standard error of the
 cumulative hazard.
 }
 \description{
-Adapted from parts of 'survfit.coxph', computes predictions for standard
-errors based on 'surv_pred_info' output and 'newdata' from the shiny app.
+Adapted from parts of 'survfit.coxph', computes predictions for
+standard errors based on 'surv_pred_info' output and 'newdata' from the
+shiny app.
+}
+\examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+  library(survival)
+  library(shinyCox)
+  colondeaths <- colon[colon$etype == 2, ]
+  split_colon <- split(colondeaths, colondeaths$rx)
+
+  colon_arm1 <- split_colon$Obs
+  colon1ph <- coxph(Surv(time, status) ~
+  factor(extent) + nodes + strata(surg) + factor(differ), colon_arm1, x =
+  TRUE, model = TRUE)
+
+  new.data = cbind.data.frame(`factor(extent)` = 3, `surg` =
+  "surg=0",`factor(differ)` = 2,`nodes` = 5)
+
+
+  coxfit = prep_coxfit(colon1ph)
+  coxlist = surv_pred_info(colon1ph)
+
+  for_confint = predict_se(coxlist, coxfit, new.data)
+\dontshow{\}) # examplesIf}
 }

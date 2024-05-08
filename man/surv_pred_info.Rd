@@ -17,8 +17,8 @@ correction for ties, 1=no, 2=yes.}
 \item{id}{optional variable name of subject identifiers. Not supported in app}
 
 \item{se.fit}{a logical value indicating whether standard errors should be
-computed. Default is TRUE for standard models, FALSE for
-multi-state (code not yet present for that case.)}
+computed. Default is TRUE for standard models, FALSE for multi-state (code
+not yet present for that case.)}
 
 \item{stype}{computation of the survival curve, 1=direct, 2= exponenial of
 the cumulative hazard. Default is 2.}
@@ -28,13 +28,14 @@ A list of information needed for computing predicted standard
 errors.
 }
 \description{
-Computes necessary information to calculate standard errors and confidence
-intervals in shiny app. This is adapted from parts of 'survfit.coxph'. This
-function is meant to be used in conjuction with 'predict_se'.
+Computes necessary information to calculate standard errors and
+confidence intervals in shiny app. This is adapted from parts of
+'survfit.coxph'. This function is meant to be used in conjuction with
+'predict_se'.
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
-library(shinyCox)
 
 colondeaths <- colon[colon$etype == 2, ]
 split_colon <- split(colondeaths, colondeaths$rx)
@@ -45,5 +46,5 @@ colon1ph <- coxph(Surv(time, status) ~ factor(extent) + nodes + strata(surg)
                    colon_arm1,
                    x = TRUE, model = TRUE)
 coxlist = surv_pred_info(colon1ph)
-
+\dontshow{\}) # examplesIf}
 }
