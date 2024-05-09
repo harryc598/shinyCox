@@ -118,7 +118,6 @@ simplify_coxph <- function(coxph.result) {
 
   cox.means <- coxph.result$means
   xlevels <- coxph.result$xlevels
-  #strata <- coxph.result$strata
   form <- coxph.result$formula
   x.rng <- apply(coxph.result$x, 2, range)
   rownames(x.rng) <- c("minimum", "maximum")
@@ -130,7 +129,6 @@ simplify_coxph <- function(coxph.result) {
            means = cox.means,    # means of the regression model matrix columns
            num.x.rng = x.rng,    # range of the regression model matrix columns
            xlevels = xlevels,    # levels of categorical predictors
-           #strata = strata,      # strata
            form = form,          # model formula
            HR.table = HR.tbl,    # hazard ratio estimates
            PHA.table = pha.tbl,  # tests of proportional hazards assumption
