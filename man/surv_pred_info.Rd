@@ -45,6 +45,6 @@ colon1ph <- coxph(Surv(time, status) ~ factor(extent) + nodes + strata(surg)
                    + factor(differ),
                    colon_arm1,
                    x = TRUE, model = TRUE)
-coxlist = surv_pred_info(colon1ph)
+surv_pred_info(colon1ph)
 \dontshow{\}) # examplesIf}
 }

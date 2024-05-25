@@ -47,7 +47,7 @@ coxlist = surv_pred_info(colon1ph)
 
 for_ci = predict_se(coxlist, coxfit, new.data)
 
-confints = get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
+get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
             conf.type = "log-log")
 \dontshow{\}) # examplesIf}
 }

@@ -44,6 +44,6 @@ shiny app.
   coxfit = prep_coxfit(colon1ph)
   coxlist = surv_pred_info(colon1ph)
 
-  for_confint = predict_se(coxlist, coxfit, new.data)
+  predict_se(coxlist, coxfit, new.data)
 \dontshow{\}) # examplesIf}
 }

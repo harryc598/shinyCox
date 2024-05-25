@@ -254,7 +254,7 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
                 "  filename = function() { paste0('plot.png') },",
                 "  content = function(file) {",
                 "    png(file, input$width, input$height)",
-                "    shinyCox::cox_KM_plots(KM.hat, clrs = colors)",
+                "    shinyCox::cox_KM_plots(KM.hat,clrs=colors, confint=input$confint, ylab=input$ylab)",
                 "    dev.off()",
                 "  })",
                 "})",

@@ -15,7 +15,7 @@ Description: Takes one or more fitted Cox proportional hazards models and writes
     contains none of the original data used to create the Cox model or models. 
     The goal is towards visualization and presentation of predicted survival
     curves.
-License: LGPL (>= 3)
+License: LGPL (>= 3) + file LICENSE
 URL: https://github.com/harryc598/shinyCox
 BugReports: https://github.com/harryc598/shinyCox/issues
 Imports: 

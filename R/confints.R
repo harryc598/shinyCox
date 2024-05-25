@@ -28,7 +28,7 @@
 #'                    + factor(differ),
 #'                    colon_arm1,
 #'                    x = TRUE, model = TRUE)
-#' coxlist = surv_pred_info(colon1ph)
+#' surv_pred_info(colon1ph)
 #'
 #' @import stats
 #' @import survival
@@ -207,7 +207,7 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
 #'   coxfit = prep_coxfit(colon1ph)
 #'   coxlist = surv_pred_info(colon1ph)
 #'
-#'   for_confint = predict_se(coxlist, coxfit, new.data)
+#'   predict_se(coxlist, coxfit, new.data)
 #'
 #' @import survival
 #' @import stats
@@ -420,7 +420,7 @@ predict_se = function(listsurv, coxfit, newdata) {
 #'
 #' for_ci = predict_se(coxlist, coxfit, new.data)
 #'
-#' confints = get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
+#' get_confint(for_ci$surv, for_ci$std.err, conf.int = 0.95,
 #'             conf.type = "log-log")
 #'
 #' @export
