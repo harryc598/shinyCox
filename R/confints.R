@@ -2,18 +2,18 @@
 #'
 #' @description Computes necessary information to calculate standard errors and
 #'   confidence intervals in shiny app. This is adapted from parts of
-#'   'survfit.coxph'. This function is meant to be used in conjuction with
-#'   'predict_se'.
+#'   [survfit.coxph()]. This function is meant to be used in conjunction with
+#'   [predict_se()].
 #'
-#' @param model a 'coxph' object
+#' @param model a `coxph` object
 #' @param ctype whether the cumulative hazard computation should have a
 #'   correction for ties, 1=no, 2=yes.
-#' @param individual deprecated argument, replaced by 'id'
+#' @param individual deprecated argument, replaced by `id`
 #' @param id optional variable name of subject identifiers. Not supported in app
 #' @param se.fit a logical value indicating whether standard errors should be
 #'   computed. Default is TRUE for standard models, FALSE for multi-state (code
 #'   not yet present for that case.)
-#' @param stype computation of the survival curve, 1=direct, 2= exponenial of
+#' @param stype computation of the survival curve, 1=direct, 2=exponential of
 #'   the cumulative hazard. Default is 2.
 #' @returns A list of information needed for computing predicted standard
 #'   errors.
@@ -175,12 +175,12 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
 
 #' Creates predicted survival and standard errors for confidence intervals
 #'
-#' @description Adapted from parts of 'survfit.coxph', computes predictions for
-#'   standard errors based on 'surv_pred_info' output and 'newdata' from the
+#' @description Adapted from parts of [survfit.coxph()], computes predictions for
+#'   standard errors based on [surv_pred_info()] output and `newdata` from the
 #'   shiny app.
 #'
-#' @param listsurv Output from 'surv_pred_info' function
-#' @param coxfit coxfit object created for predictions. Used to find strata
+#' @param listsurv Output from [surv_pred_info()] function
+#' @param coxfit `coxfit` object created for predictions. Used to find strata
 #' @param newdata Data used to make predicted standard errors
 #'
 #' @returns a list of number of subjects for each curve, times at which the
@@ -230,19 +230,18 @@ predict_se = function(listsurv, coxfit, newdata) {
   ustrata <- NULL
 
   strt.col.name <- names(coxfit$bl.surv[, !names(coxfit$bl.surv) %in% c("time", "surv"), drop = FALSE])
-
+  if(length(strt.col.name) > 0) {
   strt.var <- newdata[, strt.col.name]
   #strata.new = paste0(strt.col.name, '=', strt.var)
 
   survlist <- list(survlist[[strt.var]])
-
+  strt.val <- strsplit(newdata[[strt.col.name]], "=")[[1]][2]
+  newdata[[strt.col.name]] <- as.numeric(strt.val)
+  }
   step_1 <- gsub("factor", "", names(newdata))
   step_2 <- gsub("\\(", "", step_1)
   step_3 <- gsub("\\)", "", step_2)
   names(newdata) <- step_3
-  strt.val <- strsplit(newdata[[strt.col.name]], "=")[[1]][2]
-  newdata[[strt.col.name]] <- as.numeric(strt.val)
-
   Call <- match.call()
   Call[[1]] <- as.name("survfit")
   individual = FALSE
@@ -289,12 +288,7 @@ predict_se = function(listsurv, coxfit, newdata) {
 
   if (has.strata && found.strata) { #pull them off
     temp <- untangle.specials(Terms2, 'strata')
-    # strata2 <- strata(mf2[temp$vars], shortlabel=TRUE)
-    # strata2 <- factor(strata2, levels=levels(strata))
-    # if (any(is.na(strata2)))
-    #   stop("New data set has strata levels not found in the original")
-    # An expression like age:strata(sex) will have temp$vars= "strata(sex)"
-    #  and temp$terms = integer(0).  This does not work as a subscript
+
     if (length(temp$terms) >0) Terms2 <- Terms2[-temp$terms]
   } else strata2 <- factor(rep(0, nrow(mf2)))
 
@@ -396,7 +390,7 @@ predict_se = function(listsurv, coxfit, newdata) {
 #' 'log-log', 'logit', and 'arcsin'.
 #' @param conf.int The level for two-sided confidence interval on the predicted
 #' survival curve, default is 0.95.
-#' @param ulimit Should upper bound be limited to 1, default is TRUE
+#' @param ulimit Should upper bound be limited to 1, default is 'TRUE'
 #' @returns list of length two, containing the lower and upper confidence levels
 #'
 #' @examplesIf interactive()
@@ -468,7 +462,8 @@ get_confint <- function(p, se, conf.type, conf.int, ulimit=TRUE) {
 
 agsurv <- utils::getFromNamespace("agsurv", "survival")
 
-#' For  use in internal surv_pred_info function, borrowed from survival package
+#' For  use in internal [surv_pred_info()] function, borrowed from `survival`
+#' package
 #'
 #' @param y Surv object
 #' @param id vector of ids coinciding with y.

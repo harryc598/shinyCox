@@ -7,12 +7,12 @@
 surv_pred_info(model, ctype, individual = FALSE, id, se.fit = TRUE, stype = 2)
 }
 \arguments{
-\item{model}{a 'coxph' object}
+\item{model}{a \code{coxph} object}
 
 \item{ctype}{whether the cumulative hazard computation should have a
 correction for ties, 1=no, 2=yes.}
 
-\item{individual}{deprecated argument, replaced by 'id'}
+\item{individual}{deprecated argument, replaced by \code{id}}
 
 \item{id}{optional variable name of subject identifiers. Not supported in app}
 
@@ -20,7 +20,7 @@ correction for ties, 1=no, 2=yes.}
 computed. Default is TRUE for standard models, FALSE for multi-state (code
 not yet present for that case.)}
 
-\item{stype}{computation of the survival curve, 1=direct, 2= exponenial of
+\item{stype}{computation of the survival curve, 1=direct, 2=exponential of
 the cumulative hazard. Default is 2.}
 }
 \value{
@@ -30,8 +30,8 @@ errors.
 \description{
 Computes necessary information to calculate standard errors and
 confidence intervals in shiny app. This is adapted from parts of
-'survfit.coxph'. This function is meant to be used in conjuction with
-'predict_se'.
+\code{\link[=survfit.coxph]{survfit.coxph()}}. This function is meant to be used in conjunction with
+\code{\link[=predict_se]{predict_se()}}.
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

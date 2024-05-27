@@ -17,7 +17,7 @@ get_confint(p, se, conf.type, conf.int, ulimit = TRUE)
 \item{conf.int}{The level for two-sided confidence interval on the predicted
 survival curve, default is 0.95.}
 
-\item{ulimit}{Should upper bound be limited to 1, default is TRUE}
+\item{ulimit}{Should upper bound be limited to 1, default is 'TRUE'}
 }
 \value{
 list of length two, containing the lower and upper confidence levels

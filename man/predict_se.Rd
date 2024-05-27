@@ -7,9 +7,9 @@
 predict_se(listsurv, coxfit, newdata)
 }
 \arguments{
-\item{listsurv}{Output from 'surv_pred_info' function}
+\item{listsurv}{Output from \code{\link[=surv_pred_info]{surv_pred_info()}} function}
 
-\item{coxfit}{coxfit object created for predictions. Used to find strata}
+\item{coxfit}{\code{coxfit} object created for predictions. Used to find strata}
 
 \item{newdata}{Data used to make predicted standard errors}
 }
@@ -21,8 +21,8 @@ survival, cumulative hazard at each transition, and standard error of the
 cumulative hazard.
 }
 \description{
-Adapted from parts of 'survfit.coxph', computes predictions for
-standard errors based on 'surv_pred_info' output and 'newdata' from the
+Adapted from parts of \code{\link[=survfit.coxph]{survfit.coxph()}}, computes predictions for
+standard errors based on \code{\link[=surv_pred_info]{surv_pred_info()}} output and \code{newdata} from the
 shiny app.
 }
 \examples{

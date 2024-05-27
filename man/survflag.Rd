@@ -2,7 +2,8 @@
 % Please edit documentation in R/confints.R
 \name{survflag}
 \alias{survflag}
-\title{For  use in internal surv_pred_info function, borrowed from survival package}
+\title{For  use in internal \code{\link[=surv_pred_info]{surv_pred_info()}} function, borrowed from \code{survival}
+package}
 \usage{
 survflag(y, id)
 }
@@ -12,5 +13,6 @@ survflag(y, id)
 \item{id}{vector of ids coinciding with y.}
 }
 \description{
-For  use in internal surv_pred_info function, borrowed from survival package
+For  use in internal \code{\link[=surv_pred_info]{surv_pred_info()}} function, borrowed from \code{survival}
+package
 }
