@@ -7,7 +7,6 @@
 * Added `library(survival)` and `library(shinyCox)` to shiny app output to fix
   errors when packages were not loaded
 
-
 # shinyCox 1.0.1
 
 * Submitted to CRAN, working on updates
