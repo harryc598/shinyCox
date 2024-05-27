@@ -11,7 +11,7 @@ cox_KM_plots(KM.hat, clrs = NULL, confint, ylab = "Prob")
 
 \item{clrs}{color of lines}
 
-\item{confint}{logical value to determinie if confidence intervals should be
+\item{confint}{logical value to determine if confidence intervals should be
 plotted}
 
 \item{ylab}{text label for y-axis}

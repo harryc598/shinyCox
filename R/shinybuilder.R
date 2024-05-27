@@ -60,7 +60,7 @@ write_KM_plot_code=function(cox.fit.list)
 #'
 #' @param KM.hat Time and survival probability created by [predict_one_coxfit()]
 #' @param clrs color of lines
-#' @param confint logical value to determinie if confidence intervals should be
+#' @param confint logical value to determine if confidence intervals should be
 #' plotted
 #' @param ylab text label for y-axis
 #' @returns Plot of predicted survival curve(s)

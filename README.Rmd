@@ -25,7 +25,7 @@ While shiny apps are excellent tools for visualization, development of these app
 
 The function `shine_coxph()` initially uses the original data for internal verification purposes, but discards the original data when the app is made, containing only the bare necessities to make predictions (predictions are made in the application using the object returned by `prep_coxfit()`). When disseminating the final app, subject-identifiable data are not distributed. 
 
-The functions used to obtain the necessary information for confidence intervals in each shiny app are primarily modifications of 'survfit.coxph()' from the 'survival' package, also listed on CRAN.
+The functions used to obtain the necessary information for confidence intervals in each shiny app are primarily modifications of `survfit.coxph()` from the 'survival' package, also listed on CRAN.
 
 ## Installation
 You can install this package using:

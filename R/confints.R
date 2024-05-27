@@ -467,6 +467,7 @@ agsurv <- utils::getFromNamespace("agsurv", "survival")
 #'
 #' @param y Surv object
 #' @param id vector of ids coinciding with y.
+#' @noRd
 survflag <- function(y, id) {
   if (!inherits(y, "Surv")) stop("y must be a Surv object")
   if (nrow(y) != length(id)) stop("length mismatch")
