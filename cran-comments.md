@@ -7,6 +7,7 @@ This is an update. In this version:
 * License has been changed as new functions are modified code from the 
   'survival' package
 
+* Fixed issue with extra license file (from MIT license)
 
 ## R CMD check results
 
