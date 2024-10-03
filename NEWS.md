@@ -1,3 +1,7 @@
+# shinyCox 1.1.1
+
+* Removed deprecated code
+
 # shinyCox 1.1.0
 
 * Added support for confidence intervals in plots

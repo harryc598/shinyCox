@@ -50,8 +50,7 @@ simplify_coxph <- function(coxph.result) {
   ########
   # extract survival and linear predictor data from coxph.result
   sdat <- coxph.result$y
-  lp <- stats::predict(coxph.result,type = "lp")
-  lp.surv <- cbind.data.frame(sdat = sdat,lp = lp)
+
 
   ########
   # compute the baseline Cox survival function in a data.frame format
@@ -123,7 +122,6 @@ simplify_coxph <- function(coxph.result) {
   rownames(x.rng) <- c("minimum", "maximum")
 
   res <- list(bl.surv = bl.surv,    # baseline survival function estimate
-           lp.surv = lp.surv,    # subject level linear predictor and survival data
            types = cox.types,    # vector of data types (character, numeric, strata, etc)
            coefs = cox.coefs,    # regression coefficient estimates
            means = cox.means,    # means of the regression model matrix columns
