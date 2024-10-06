@@ -30,7 +30,7 @@ errors.
 \description{
 Computes necessary information to calculate standard errors and
 confidence intervals in shiny app. This is adapted from parts of
-\code{\link[=survfit.coxph]{survfit.coxph()}}. This function is meant to be used in conjunction with
+\code{\link[survival:survfit.coxph]{survival::survfit.coxph()}}. This function is meant to be used in conjunction with
 \code{\link[=predict_se]{predict_se()}}.
 }
 \examples{

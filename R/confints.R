@@ -2,7 +2,7 @@
 #'
 #' @description Computes necessary information to calculate standard errors and
 #'   confidence intervals in shiny app. This is adapted from parts of
-#'   [survfit.coxph()]. This function is meant to be used in conjunction with
+#'   [survival::survfit.coxph()]. This function is meant to be used in conjunction with
 #'   [predict_se()].
 #'
 #' @param model a `coxph` object
@@ -175,7 +175,7 @@ surv_pred_info = function(model, ctype, individual = FALSE, id, se.fit = TRUE, s
 
 #' Creates predicted survival and standard errors for confidence intervals
 #'
-#' @description Adapted from parts of [survfit.coxph()], computes predictions for
+#' @description Adapted from parts of [survival::survfit.coxph()], computes predictions for
 #'   standard errors based on [surv_pred_info()] output and `newdata` from the
 #'   shiny app.
 #'

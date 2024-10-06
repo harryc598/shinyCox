@@ -21,7 +21,7 @@ survival, cumulative hazard at each transition, and standard error of the
 cumulative hazard.
 }
 \description{
-Adapted from parts of \code{\link[=survfit.coxph]{survfit.coxph()}}, computes predictions for
+Adapted from parts of \code{\link[survival:survfit.coxph]{survival::survfit.coxph()}}, computes predictions for
 standard errors based on \code{\link[=surv_pred_info]{surv_pred_info()}} output and \code{newdata} from the
 shiny app.
 }
