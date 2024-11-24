@@ -21,7 +21,7 @@ make_DT_table <- function(cox.fit.list) {
                       paste0("infoBoxOutput('events", i, "')),"),
                       "h4('Hazard Ratio Summary Table'),",
                       paste0("DT::dataTableOutput(outputId = 'HR", i, "'),"),
-                      "h4('Assesing the Proportional Hazards Assumption'),",
+                      "h4('Assessing the Proportional Hazards Assumption'),",
                       paste0("DT::dataTableOutput(outputId = 'PHA", i, "')"),
                       "),"
                       )
@@ -38,7 +38,7 @@ make_DT_table <- function(cox.fit.list) {
                       paste0("infoBoxOutput('events", i, "')),"),
                       "h4('Hazard Ratio Summary Table'),",
                       paste0("DT::dataTableOutput(outputId = 'HR", i, "'),"),
-                      "h4('Assesing the Proportional Hazards Assumption'),",
+                      "h4('Assessing the Proportional Hazards Assumption'),",
                       paste0("DT::dataTableOutput(outputId = 'PHA", i, "')")
                    )
 

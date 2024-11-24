@@ -155,8 +155,8 @@ shine_coxph <- function(..., app.dir = NULL, theme = c("default", "dashboard"))
   hdr.code <- c("#rm(list=ls())",
              "options(stringsAsFactors=FALSE)",
              "library(shinyCox)",
-             paste0("load('", gsub("\\\\", "/", app.dir), "appData.Rdata')"))
-
+             #paste0("load('", gsub("\\\\", "/", app.dir), "appData.Rdata')"))
+             paste0('load("', gsub("\\\\", "/", app.dir), 'appData.Rdata")'))
 
   ########################
   # generate ui code

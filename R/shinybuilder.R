@@ -482,7 +482,7 @@ prop_haz_tables <- function(cox.fit.list) {
                   paste0("h4(textOutput(outputId = 'title", i, "')),"),
                   "column(12, align = 'center', h4('Hazard Ratio Summary Table')),",
                   paste0("column(12, align = 'center', tableOutput(outputId = 'HR", i, "')),"),
-                  "column(12, align = 'center', h4('Assesing the Proportional Hazards Assumption')),",
+                  "column(12, align = 'center', h4('Assessing the Proportional Hazards Assumption')),",
                   paste0("column(12, align = 'center', tableOutput(outputId = 'PHA", i, "')),"),
                   paste0("textOutput(outputId = 'nevents", i, "')"),
                   "),") } else
@@ -490,7 +490,7 @@ prop_haz_tables <- function(cox.fit.list) {
                                 paste0("h4(textOutput(outputId = 'title", i, "')),"),
                                 "column(12, align = 'center', h4('Hazard Ratio Summary Table')),",
                                 paste0("column(12, align = 'center', tableOutput(outputId = 'HR", i, "')),"),
-                                "column(12, align = 'center', h4('Assesing the Proportional Hazards Assumption')),",
+                                "column(12, align = 'center', h4('Assessing the Proportional Hazards Assumption')),",
                                 paste0("column(12, align = 'center', tableOutput(outputId = 'PHA", i, "')),"),
                                 paste0("textOutput(outputId = 'nevents", i, "')"),
                                 ")")
