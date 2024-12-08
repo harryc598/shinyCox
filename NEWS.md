@@ -1,3 +1,5 @@
+# shinyCox 1.1.2
+
 # shinyCox 1.1.1
 
 * Removed deprecated code
