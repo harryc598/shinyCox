@@ -84,7 +84,7 @@ simplify_coxph <- function(coxph.result) {
                "Lower Bound" = exp(cox.CIs[, 1]),
                "Upper Bound" = exp(cox.CIs[, 2]),
                "p value" = cox.smry[, "Pr(>|z|)"])
-  pha.tbl <- cox.pha
+  pha.tbl <- cox.pha$table
   nevents <- coxph.result$nevent
   nsample <- coxph.result$n
 

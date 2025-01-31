@@ -54,7 +54,7 @@ make_DT_table <- function(cox.fit.list) {
                            "                                 target = 'cell',",
                            "                                 # the fontweight argument will bold cells under a certain value, the default is 0.05",
                            "                                 fontweight = DT::styleInterval(0.05, c('bold', 'normal'))))",
-                    paste0("output$PHA", i, "=DT::renderDataTable(DT::datatable(cox.fit.list[[", i, "]]$PHA.table$table,"),
+                    paste0("output$PHA", i, "=DT::renderDataTable(DT::datatable(cox.fit.list[[", i, "]]$PHA.table,"),
                            "                                      options = list(",
                            "                                      dom = 't')))",
                            paste0("output$subjects", i, "=renderInfoBox({"),

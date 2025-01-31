@@ -474,7 +474,7 @@ prop_haz_tables <- function(cox.fit.list) {
   for (i in 1:length(cox.fit.list)) {
 
     server.code = c(server.code,paste0("output$HR", i, "=renderTable(cox.fit.list[[",i, "]]$HR.table,rownames=TRUE)"),
-                    paste0("output$PHA", i, "=renderTable(cox.fit.list[[",i, "]]$PHA.table$table,rownames=TRUE)"),
+                    paste0("output$PHA", i, "=renderTable(cox.fit.list[[",i, "]]$PHA.table,rownames=TRUE)"),
                     paste0("output$title", i, "=renderText(paste(cox.fit.list[[",i,"]]$nsample, 'subjects,', cox.fit.list[[",i, "]]$nevents, 'events'))"))
 
     if(i < length(cox.fit.list)) {
