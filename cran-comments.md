@@ -1,7 +1,7 @@
 ## Update
 This is an update. In this version:
 
-* Fixing a few spelling errors in the shiny app
+* Fixed a bug allowing user more access than they should have
 
 ## R CMD check results
 
