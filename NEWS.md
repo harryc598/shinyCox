@@ -1,3 +1,7 @@
+# shinyCox 1.1.3
+
+* Bug fixes
+
 # shinyCox 1.1.2
 
 * Fixed spelling errors
